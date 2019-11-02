@@ -1,0 +1,20 @@
+options:
+	CODE: playerdata
+
+on load:
+	send "[%script%] Successfully loaded." to console
+	set {dbDirect::playerData} to "plugins/Skript/scripts/DB/PlayerData"
+
+on unload:
+	delete {dbDirect::playerData}
+
+on join:
+	# 접속한 플레이어의 접속 시간 저장
+  set {playerInfo.join::%uuid of player%} to now
+
+on quit:
+	# 활동시간 저장
+	set {_time} to {data.%uuid of player%.{@CODE}::playTime} parsed as timespan
+	add difference between now and {playerInfo.join::%uuid of player%} to {_time}
+	set {data.%uuid of player%.{@CODE}::playTime} to "%{_time}%"
+
