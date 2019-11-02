@@ -2,11 +2,11 @@
 on load:
   loop {info.user::*}:
     if getDayFromLastLogin( loop-index ) <= 5:
-			add 1 to {_cnt}
-			send "[%script%] load %loop-value%(%loop-index%)" to console
+      add 1 to {_cnt}
+      send "[%script%] load %loop-value%(%loop-index%)" to console
       saveYamlToValue(loop-index, "playerData")
-    else
-			send "[%script%] remove %loop-value%(%loop-index%)" to console
+    else:
+      send "[%script%] remove %loop-value%(%loop-index%)" to console
       delete {info.uuid::%{info.name::%loop-index%}%}
       delete {info.user::%loop-index%}
       delete {info.name::%loop-index%}
@@ -14,3 +14,12 @@ on load:
     set {_cnt} to 0
   send "[%script%] loaded %{_cnt}% players" to console
   send "[%script%] Successfully loaded." to console
+
+on unload:
+  loop {info.user::*}:
+    add 1 to {_cnt}
+    send "[%script%] export %loop-value%(%loop-index%)" to console
+    saveValueToYaml(loop-index, "playerData")
+  if {_cnt} is not set:
+    set {_cnt} to 0
+  send "[%script%] exported %{_cnt}% players" to console

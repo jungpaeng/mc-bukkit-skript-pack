@@ -5,9 +5,6 @@ on load:
   send "[%script%] Successfully loaded." to console
   set {dbDirect::playerData} to "plugins/Skript/scripts/DB/PlayerData"
 
-on unload:
-  delete {dbDirect::playerData}
-
 on join:
   # 접속한 플레이어의 기본 정보를 저장
   set {info.user::%uuid of player%} to player
@@ -29,9 +26,6 @@ on quit:
   add difference between now and {playerInfo.join::%uuid of player%} to {_time}
   set {data.%uuid of player%.{@CODE}::playTime} to "%{_time}%"
 
-  loop {data.%uuid of player%.{@CODE}::*}:
-    set yaml value loop-index from "%{dbDirect::playerData}%/%uuid of player%.yaml" to {data.%uuid of player%.{@CODE}::%loop-index%}
-  delete {data.%uuid of player%.{@CODE}::*}
   delete {playerInfo.join::%uuid of player%}
 
 # 유저 마지막 로그인 이후 경과 시간

@@ -7,8 +7,6 @@ function saveYamlToValue(pu: text, code: text):
     set {_dir} to "%{dbDirect::%{_code}%}%"
   else:
     set {_dir} to "%{dbDirect::%{_code}%}%/%{_pu}%.yaml"
-  
-  loop {data.%{_pu}%.%{_code}%::*}:
 
   # DB에 있는 PlayerInfo 데이터를 Value에 불러오기
   if file {_dir} exists:
@@ -16,3 +14,21 @@ function saveYamlToValue(pu: text, code: text):
     loop {_nodes::*}:
       set {_value} to yaml value loop-value from {_dir}
       set {data.%{_pu}%.%{_code}%::%loop-value%} to {_value}
+
+function saveValueToYaml(pu: text, code: text):
+  # _dir 변수에 데이터 위치 불러오기
+  if {_pu} is "server":
+    set {_dir} to "%{dbDirect::%{_code}%}%"
+  else:
+    set {_dir} to "%{dbDirect::%{_code}%}%/%{_pu}%.yaml"
+  
+  # 데이터가 존재하는 경우
+  if {data.%{_pu}%.%{_code}%::*} is set:
+    if file {_dir} exists:
+      # 기존 yaml 제거
+      loop yaml nodes "" from {_dir}:
+        delete yaml nodes "%loop-value%" from {_dir}
+    loop {data.%{_pu}%.%{_code}%::*}:
+       # 데이터 내보내기 및 value 데이터 제거
+      set yaml value loop-index from {_dir} to loop-value
+      delete {data.%{_pu}%.%{_code}%::%loop-index%}
