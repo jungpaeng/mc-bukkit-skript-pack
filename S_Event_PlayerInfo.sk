@@ -9,6 +9,12 @@ on unload:
   delete {dbDirect::playerData}
 
 on join:
+  # 접속한 플레이어의 기본 정보를 저장
+  set {info.user::%uuid of player%} to player
+  set {info.name::%uuid of player%} to player's name
+  set {info.uuid::%{info.name::%uuid of player%}%} to player's uuid
+  broadcast "%{info.name::%uuid of player%}%"
+
   # 접속한 플레이어의 접속 시간 저장
   set {playerInfo.join::%uuid of player%} to now
 
