@@ -14,8 +14,8 @@ on join:
 
   # 최초 접속 / 최근 접속 시간 저장
   if {data.%uuid of player%.{@CODE}::firstLogin} is not set:
-    set {data.%uuid of player%.{@CODE}::firstLogin} to now formatted with "YYMMdd-HHmmss"
-  set {data.%uuid of player%.{@CODE}::lastLogin} to now formatted with "YYMMdd-HHmmss"
+    set {data.%uuid of player%.{@CODE}::firstLogin} to {playerInfo.join::%uuid of player%} formatted with "YYMMdd-HHmmss"
+  set {data.%uuid of player%.{@CODE}::lastLogin} to {playerInfo.join::%uuid of player%} formatted with "YYMMdd-HHmmss"
 
 on quit:
   # 활동시간 저장
@@ -23,3 +23,7 @@ on quit:
   add difference between now and {playerInfo.join::%uuid of player%} to {_time}
   set {data.%uuid of player%.{@CODE}::playTime} to "%{_time}%"
 
+  loop {data.%uuid of player%.{@CODE}::*}:
+    set yaml value loop-index from "%{dbDirect::playerData}%/%uuid of player%.yaml" to {data.%uuid of player%.{@CODE}::%loop-index%}
+  delete {data.%uuid of player%.{@CODE}::*}
+  delete {playerInfo.join::%uuid of player%}
