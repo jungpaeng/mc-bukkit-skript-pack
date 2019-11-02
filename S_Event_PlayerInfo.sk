@@ -12,6 +12,11 @@ on join:
 	# 접속한 플레이어의 접속 시간 저장
   set {playerInfo.join::%uuid of player%} to now
 
+	# 최초 접속 / 최근 접속 시간 저장
+	if {data.%uuid of player%.{@CODE}::firstLogin} is not set:
+		set {data.%uuid of player%.{@CODE}::firstLogin} to now formatted with "YYMMdd-HHmmss"
+	set {data.%uuid of player%.{@CODE}::lastLogin} to now formatted with "YYMMdd-HHmmss"
+
 on quit:
 	# 활동시간 저장
 	set {_time} to {data.%uuid of player%.{@CODE}::playTime} parsed as timespan

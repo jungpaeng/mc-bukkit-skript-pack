@@ -1,4 +1,6 @@
 [PlayerInfo]
-- DB 위치:      dbDirect::playerData
-- 접속 시간:    playerInfo.join::%uuid of player%
-- 플레이 시간:  data.%uuid of player%.playerdata::playTime
+- DB 위치:        dbDirect::playerData
+- 접속 시간:      playerInfo.join::%uuid of player%
+- 플레이 시간:    data.%uuid of player%.playerdata::playTime
+- 최초 접속 시간: data.%uuid of player%.{@CODE}::firstLogin
+- 최근 접속 시간: data.%uuid of player%.{@CODE}::lastLogin
