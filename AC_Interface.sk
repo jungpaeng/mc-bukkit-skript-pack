@@ -1,34 +1,5 @@
 on load:
   send "[%script%] Successfully loaded." to console
-  set {dbDirect::playerData} to "plugins/Skript/scripts/DB/PlayerData"
-
-on unload:
-  delete {dbDirect::playerData}
-
-# 유저 마지막 로그인 이후 경과 시간
-function getDayFromLastLogin(pu: text) :: number:
-  set {_now} to now formatted with "YYMMdd"
-  set {_lastLogin} to yaml value "lastlogin" from "%{dbDirect::playerData}%/%{_pu}%.yaml"
-
-  loop 1 and 3, 5:
-    # 마지막 접속 날자의 Year, Month, Day 저장
-    set {_time::1} to subtext of {_lastLogin} between loop-value to loop-value + 1
-    # 현재 시간의 Year, Month, Day 저장
-    set {_time::2} to subtext of {_now} between loop-value to loop-value + 1
-
-    # _day 변수에 마지막 로그인 이후 경과 시간을 저장
-    if ({_time::1} is {_time::2}):
-      if (loop-value is 1):
-        add ( {_time::2} parsed as integer - {_time::1} parsed as integer ) * 365 to {_day}
-      else if (loop-value is 3):
-        add ( {_time::2} parsed as integer - {_time::1} parsed as integer ) * 30 to {_day}
-      else if (loop-value is 5):
-        add ( {_time::2} parsed as integer - {_time::1} parsed as integer ) to {_day}
-  
-  if {_day} is not set:
-    set {_day} to 0
-
-  return {_day}
 
 function saveYamlToValue(pu: text, code: text):
   # _dir 변수에 데이터 위치 불러오기
