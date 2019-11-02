@@ -9,7 +9,6 @@ function saveYamlToValue(pu: text, code: text):
     set {_dir} to "%{dbDirect::%{_code}%}%/%{_pu}%.yaml"
   
   loop {data.%{_pu}%.%{_code}%::*}:
-    broadcast "[1]:: %loop-index%"
 
   # DB에 있는 PlayerInfo 데이터를 Value에 불러오기
   if file {_dir} exists:
