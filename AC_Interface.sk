@@ -11,9 +11,15 @@ function saveYamlToValue(pu: text, code: text):
   # DB에 있는 PlayerInfo 데이터를 Value에 불러오기
   if file {_dir} exists:
     set {_nodes::*} to yaml nodes "" from {_dir}
-    loop {_nodes::*}:
-      set {_value} to yaml value loop-value from {_dir}
-      set {data.%{_pu}%.%{_code}%::%loop-value%} to {_value}
+    while number of {_nodes::*} is not 0:
+      loop {_nodes::*}:
+        set {_value} to yaml value loop-value-1 from {_dir}
+        if "%{_value}%" don't contain "MemorySection":
+          set {data.%{_pu}%.%{_code}%::%loop-value-1%} to {_value}
+        else:
+          loop yaml nodes loop-value-1 from {_dir}:
+            add "%loop-value-1%.%loop-value-2%" to {_nodes::*}
+        remove loop-value-1 from {_nodes::*}
 
 function saveValueToYaml(pu: text, code: text):
   # _dir 변수에 데이터 위치 불러오기
@@ -24,10 +30,6 @@ function saveValueToYaml(pu: text, code: text):
   
   # 데이터가 존재하는 경우
   if {data.%{_pu}%.%{_code}%::*} is set:
-    if file {_dir} exists:
-      # 기존 yaml 제거
-      loop yaml nodes "" from {_dir}:
-        delete yaml nodes "%loop-value%" from {_dir}
     loop {data.%{_pu}%.%{_code}%::*}:
        # 데이터 내보내기 및 value 데이터 제거
       set yaml value loop-index from {_dir} to loop-value
