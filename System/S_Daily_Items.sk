@@ -1,0 +1,130 @@
+options:
+  text.prefix: [&cD&7aily&cI&7tems&r]
+  text.color : &7
+  item.frame: frame
+  item.save: save
+  inven.setting : Daily Items - Setting
+  INV.CODE : &0&0&1&4&r
+
+on load: #! 콘솔에 로드 띄우기
+  send "[%script%] Successfully loaded." to console
+
+function DailyItem_SetItem(p:player): #! 일일 아이템 세팅
+  # set {_inventory} to chest with 2 rows named "example"
+  open better inventory type "CHEST" with 4 row named "{@inven.setting}" to {_p}
+  loop 0 and 8, 9, 17, 18, 26, 27:
+    set slot loop-number of current inventory of {_p} to black stained glass pane named "{@item.frame}"
+  set slot 35 of current inventory of {_p} to redstone named "{@item.save}"
+  if {data.server.dailyitems::*} is set:
+    loop {data.server.dailyitems::*}:
+      if loop-index contain "items.":
+        set {_slot} to loop-index
+        set {_slot} to ( last element of {_slot} split at "." ) parsed as integer
+        set slot {_slot} of current inventory of {_p} to loop-value
+
+function DailyItem_SaveItem(p:player): #! 아이템 세팅 인벤토리 닫기
+  set {_slot} to 0
+  loop 4 times:
+    loop 7 times:
+      add 1 to {_slot}
+      set {data.server.dailyitems::items.%{_slot}%} to slot {_slot} of current inventory of {_p}
+    add 2 to {_slot}
+  message "{@text.prefix}{@text.color} Setting save" to {_p}
+
+function DailyItem_GetItem(p:player): #! 일일 아이템 받기
+  set {_pu} to uuid of {_p}
+  if {data.%{_pu}%.playerdata::dailyitems.today} is not set:
+    set {data.%{_pu}%.playerdata::dailyitems.today} to 1
+
+  if {data.%{_pu}%.playerdata::dailyitems.today} < 8:
+    set {_today} to {data.%{_pu}%.playerdata::dailyitems.today}
+  else if {data.%{_pu}%.playerdata::dailyitems.today} < 15:
+    set {_today} to {data.%{_pu}%.playerdata::dailyitems.today} + 2
+  else if {data.%{_pu}%.playerdata::dailyitems.today} < 22:
+    set {_today} to {data.%{_pu}%.playerdata::dailyitems.today} + 4
+  else if {data.%{_pu}%.playerdata::dailyitems.today} < 29:
+    set {_today} to {data.%{_pu}%.playerdata::dailyitems.today} + 6
+  else:
+    set {data.%{_pu}%.playerdata::dailyitems.today} to 1
+    set {_today} to 1
+
+  open "CHEST" with 4 rows named "{@INV.CODE}[%{data.%{_pu}%.playerdata::dailyitems.today}%일차] 아이템을 받아가세요" to {_p}
+  loop 0 and 8, 9, 17, 18, 26, 27, 35:
+    set slot loop-number of current inventory of {_p} to black stained glass pane named "{@item.frame}"
+  if {data.server.dailyitems::*} is set:
+    loop {data.server.dailyitems::*}:
+      loop-index contain "items."
+      set {_slot} to loop-index
+      set {_slot} to ( last element of {_slot} split at "." ) parsed as integer
+      if {_slot} < {_today}:
+        set slot {_slot} of current inventory of {_p} to white stained glass pane named "{@item.frame}"
+      else:
+        set slot {_slot} of current inventory of {_p} to loop-value
+
+command /dailyItem [<text>]:
+  trigger:
+    if arg-1 is not set:
+      message "인자를 입력해주세요."
+    if arg-1 is "set":
+      if player is op:
+        DailyItem_SetItem(player)
+    if arg-1 is "get":
+      renewPlayerPlayTime(uuid of player)
+
+      # 플레이어의 하루 접속 시간이 1시간 이상인 경우에만 지급
+      if {data.%uuid of player%.playerData::playTime.daily} parsed as timespan < 1 hours:
+        send "{@text.prefix} 접속한지 한 시간이 지나야 일일 아이템을 받을 수 있습니다!" to player
+        send "{@text.prefix} 접속한 시간: %{data.%uuid of player%.playerData::playTime.daily}%" to player
+      else if {data.%uuid of player%.playerdata::dailyitems.lasttime} is now formatted with "YYMMdd":
+        send "{@text.prefix} %{data.%uuid of player%.playerdata::dailyitems.today}%일차 아이템을 받으려면 내일 다시 찾아주세요" to player
+      else:
+        DailyItem_GetItem(player)
+    if arg-1 is "clear":
+      set {data.%uuid of player%.playerdata::dailyitems.lasttime} to "180828"
+
+on inventory click: #! 아이템 세팅 인벤토리 닫기
+  if inventory name is "{@inven.setting}":
+    if name of clicked item is "{@item.frame}":
+      cancel event
+    if name of clicked item is "{@item.save}":
+      cancel event
+      DailyItem_SaveItem(player)
+      close player's inventory
+
+on inventory click: #! 일일 아이템 받기
+  if inventory name contain "{@INV.CODE}":
+    set {_clicke.inventory} to "%clicked inventory%"
+    set {_clicke.inventory::*} to {_clicke.inventory} split at "of "
+
+    if {_clicke.inventory::2} is player:
+      cancel event
+
+    if name of clicked item is "{@item.frame}":
+      cancel event
+
+    # 오늘 날짜에 해당하는 슬롯 칸 찾기 알고리즘
+    if {data.%uuid of player%.playerdata::dailyitems.today} is not set:
+      set {data.%uuid of player%.playerdata::dailyitems.today} to 1
+    if {data.%uuid of player%.playerdata::dailyitems.today} < 8:
+      set {_today} to {data.%uuid of player%.playerdata::dailyitems.today}
+    else if {data.%uuid of player%.playerdata::dailyitems.today} < 15:
+      set {_today} to {data.%uuid of player%.playerdata::dailyitems.today} + 2
+    else if {data.%uuid of player%.playerdata::dailyitems.today} < 22:
+      set {_today} to {data.%uuid of player%.playerdata::dailyitems.today} + 4
+    else if {data.%uuid of player%.playerdata::dailyitems.today} < 29:
+      set {_today} to {data.%uuid of player%.playerdata::dailyitems.today} + 6
+
+    if clicked slot is {_today}:
+      if {data.%uuid of player%.playerdata::dailyitems.lasttime} is not now formatted with "YYMMdd":
+        set {data.%uuid of player%.playerdata::dailyitems.lasttime} to now formatted with "YYMMdd"
+        give slot clicked slot of current inventory to player
+        set slot clicked slot of current inventory to white stained glass pane named " "
+        add 1 to {data.%uuid of player%.playerdata::dailyitems.today}
+        if {data.%uuid of player%.playerdata::dailyitems.today} > 28:
+          set {data.%uuid of player%.playerdata::dailyitems.today} to 1
+        send "{@text.prefix} 아이템이 지급되었습니다!" to player
+        close player's inventory
+      else:
+        cancel event
+    else:
+      cancel event
