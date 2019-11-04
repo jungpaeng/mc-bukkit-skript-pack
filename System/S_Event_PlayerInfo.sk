@@ -29,15 +29,7 @@ on join:
   set {data.%uuid of player%.{@CODE}::lastLogin} to {playerInfo.join::%uuid of player%} formatted with "YYMMdd-HHmmss"
 
 on quit:
-  # 활동시간 저장
-  set {_playTime.key} to "total daily"
-  set {_playTime.key::*} to {_playTime.key} split at " "
-
-  loop {_playTime.key::*}:
-    set {_time.%loop-value%} to {data.%uuid of player%.{@CODE}::playTime.%loop-value%} parsed as timespan
-    add difference between now and {playerInfo.join::%uuid of player%} to {_time.%loop-value%}
-    set {data.%uuid of player%.{@CODE}::playTime.%loop-value%} to "%{_time.%loop-value%}%"
-
+  renewPlayerPlayTime(uuid of player)
   delete {playerInfo.join::%uuid of player%}
 
 # 유저 마지막 로그인 이후 경과 시간
@@ -64,3 +56,15 @@ function getDayFromLastLogin(pu: text) :: number:
     set {_day} to 0
 
   return {_day}
+
+# 활동시간 저장
+function renewPlayerPlayTime(pu: text):
+  set {_playTime.key} to "total daily"
+  set {_playTime.key::*} to {_playTime.key} split at " "
+
+  loop {_playTime.key::*}:
+    set {_time.%loop-value%} to {data.%{_pu}%.{@CODE}::playTime.%loop-value%} parsed as timespan
+    add difference between now and {playerInfo.join::%{_pu}%} to {_time.%loop-value%}
+    set {data.%{_pu}%.{@CODE}::playTime.%loop-value%} to "%{_time.%loop-value%}%"
+  
+  set {playerInfo.join::%{_pu}%} to now
