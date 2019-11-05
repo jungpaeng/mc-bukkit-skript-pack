@@ -11,17 +11,17 @@ on join:
   set {info.name::%uuid of player%} to player's name
   set {info.uuid::%{info.name::%uuid of player%}%} to player's uuid
 
+  # 접속한 플레이어의 접속 시간 저장
+  set {playerInfo.join::%uuid of player%} to now
+
+  # 하루 이상 지나면 DailyTime 제거
   if {data.%uuid of player%.{@CODE}::lastLogin} is set:
-    # 하루 이상 지나면 DailyTime 제거
-    set {_now} to now formatted with "YYMMdd"
+    set {_nowFormat} to {playerInfo.join::%uuid of player%} formatted with "YYMMdd"
     set {_playTimeDay} to subtext of {data.%uuid of player%.{@CODE}::lastlogin} between 3 to 4
-    set {_nowDay} to subtext of {_now} between 3 to 4
+    set {_nowDay} to subtext of {_nowFormat} between 3 to 4
 
     if {_playTimeDay} is not {_nowDay}:
       delete {data.%uuid of player%.{@CODE}::playTime.daily}
-
-  # 접속한 플레이어의 접속 시간 저장
-  set {playerInfo.join::%uuid of player%} to now
 
   # 최초 접속 / 최근 접속 시간 저장
   if {data.%uuid of player%.{@CODE}::firstLogin} is not set:
@@ -68,3 +68,10 @@ function renewPlayerPlayTime(pu: text):
     set {data.%{_pu}%.{@CODE}::playTime.%loop-value%} to "%{_time.%loop-value%}%"
   
   set {playerInfo.join::%{_pu}%} to now
+
+# 매 분마다, 현재 시간을 체크합니다.
+every minute:
+  if now formatted with "HH:mm" is "00:00":
+    loop all players:
+      set {playerInfo.join::%{_pu}%} to now
+      delete {data.%uuid of loop-player%.{@CODE}::playTime.daily}
