@@ -79,7 +79,7 @@ command /dailyItem [<text>]:
       renewPlayerPlayTime(uuid of player)
 
       # 플레이어의 하루 접속 시간이 1시간 이상인 경우에만 지급
-      if {data.%uuid of player%.playerData::playTime.daily} parsed as timespan < 1 minutes:
+      if {data.%uuid of player%.playerData::playTime.daily} parsed as timespan < 1 hours:
         send "{@text.prefix} 접속한지 한 시간이 지나야 일일 아이템을 받을 수 있습니다!" to player
         send "{@text.prefix} 접속한 시간: %{data.%uuid of player%.playerData::playTime.daily}%" to player
       else if {data.%uuid of player%.playerdata::dailyitems.lasttime} is now formatted with "YYMMdd":
