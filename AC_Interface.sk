@@ -4,7 +4,7 @@ on load:
 function saveYamlToValue(pu: text, code: text):
   # _dir 변수에 데이터 위치 불러오기
   if {_pu} is "server":
-    set {_dir} to "%{dbDirect::%{_code}%}%"
+    set {_dir} to "%{dbDirect::%{_code}%}%.yaml"
   else:
     set {_dir} to "%{dbDirect::%{_code}%}%/%{_pu}%.yaml"
 
@@ -24,13 +24,16 @@ function saveYamlToValue(pu: text, code: text):
 function saveValueToYaml(pu: text, code: text):
   # _dir 변수에 데이터 위치 불러오기
   if {_pu} is "server":
-    set {_dir} to "%{dbDirect::%{_code}%}%"
+    set {_dir} to "%{dbDirect::%{_code}%}%.yaml"
   else:
     set {_dir} to "%{dbDirect::%{_code}%}%/%{_pu}%.yaml"
   
   # 데이터가 존재하는 경우
   if {data.%{_pu}%.%{_code}%::*} is set:
+    # 기존 yaml 제거
+    loop yaml nodes "" from {_dir}:
+      delete yaml nodes "%loop-value%" from {_dir}
+    # 데이터 내보내기 및 value 데이터 제거
     loop {data.%{_pu}%.%{_code}%::*}:
-       # 데이터 내보내기 및 value 데이터 제거
       set yaml value loop-index from {_dir} to loop-value
       delete {data.%{_pu}%.%{_code}%::%loop-index%}

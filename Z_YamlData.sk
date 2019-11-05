@@ -12,6 +12,7 @@ on load:
       delete {info.name::%loop-index%}
   if {_cnt} is not set:
     set {_cnt} to 0
+  saveYamlToValue("server", "dailyItems")
   send "[%script%] loaded %{_cnt}% players" to console
   send "[%script%] Successfully loaded." to console
 
@@ -22,4 +23,5 @@ on unload:
     saveValueToYaml(loop-index, "playerData")
   if {_cnt} is not set:
     set {_cnt} to 0
+  saveValueToYaml("server", "dailyItems")
   send "[%script%] exported %{_cnt}% players" to console

@@ -8,6 +8,7 @@ options:
 
 on load: #! 콘솔에 로드 띄우기
   send "[%script%] Successfully loaded." to console
+  set {dbDirect::dailyItems} to "plugins/Skript/scripts/DB/DailyItems"
 
 function DailyItem_SetItem(p:player): #! 일일 아이템 세팅
   # set {_inventory} to chest with 2 rows named "example"
@@ -64,7 +65,13 @@ function DailyItem_GetItem(p:player): #! 일일 아이템 받기
 command /dailyItem [<text>]:
   trigger:
     if arg-1 is not set:
-      message "인자를 입력해주세요."
+      make player execute command "/dailyItem help"
+    if arg 1 is "help":
+      send "&8&m----------------&r &6✎ &e&lDaily Items&r &6✐ &8&m----------------"
+      send " &a/dailyItem get &8| &7출석 체크 아이템을 받을 수 있는 창을 노축합니다."
+      if player is op:
+        send " &a/dailyItem set &8| &7출석 체크 아이템을 설정할 수 있는 창을 노축합니다."
+        send " &a/dailyItem clear &8| &7[테스트용] 출석 체크 아이템을 받았다는 기록을 지웁니다."
     if arg-1 is "set":
       if player is op:
         DailyItem_SetItem(player)
@@ -72,7 +79,7 @@ command /dailyItem [<text>]:
       renewPlayerPlayTime(uuid of player)
 
       # 플레이어의 하루 접속 시간이 1시간 이상인 경우에만 지급
-      if {data.%uuid of player%.playerData::playTime.daily} parsed as timespan < 1 hours:
+      if {data.%uuid of player%.playerData::playTime.daily} parsed as timespan < 1 minutes:
         send "{@text.prefix} 접속한지 한 시간이 지나야 일일 아이템을 받을 수 있습니다!" to player
         send "{@text.prefix} 접속한 시간: %{data.%uuid of player%.playerData::playTime.daily}%" to player
       else if {data.%uuid of player%.playerdata::dailyitems.lasttime} is now formatted with "YYMMdd":
