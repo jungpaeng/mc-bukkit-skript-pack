@@ -7,6 +7,8 @@ options:
   ShopItemPrefix: <green>[Shop-Item]<black>
   CODE: playerData
 
+  ButtonGoMainPage: Redstone Dust named "<light red><bold>메인 메뉴" with lore "" and "<green>[좌클릭] <pink>메인 메뉴로 이동합니다."
+
 on load:
   if file "{@ShopMenuTxt}" exists:
     # 상점 파일의 내용을 변수로 갱신
@@ -50,12 +52,10 @@ on player inventory click:
         open "CHEST" with 6 rows named "{@ShopItemPrefix} %{S.Menu::%loop-index%.Parse::2}%" to player
         if {S.Menu::%loop-index%.Items::*} is set:
           loop {S.Menu::%loop-index%.Items::*}:
-            set slot {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4}%" and "&a[ &f판매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"
+            set slot {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4}%" and "&a[ &f판매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"  
+          set slot 49 of current inventory of player to {@ButtonGoMainPage}
         else:
           send "상점 서브 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
-
-    # if name of clicked item is "&c닫기":
-    #   close player's inventory
 
 # 서브 상점 메뉴일 때 이벤트
 on player inventory click:
@@ -106,11 +106,11 @@ on player inventory click:
             send "{@ShopPrefix} &c'%{_currentItemParsed::2}%&c'이 부족합니다."
         stop
 
-      # if name of clicked item is "&c닫기":
-      #   close player's inventory
+      if clicked item is {@ButtonGoMainPage}:
+        close player's inventory
+        make player execute command "/shop"
+
 
 on inventory close:
   if {S.Menu.%uuid of player%.Select} is set:
     delete {S.Menu.%uuid of player%.Select}
-
-# set slot {_row} * 9 - 1 of current inventory of {_p} to Redstone Dust named "&c닫기"
