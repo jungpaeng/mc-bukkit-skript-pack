@@ -30,15 +30,18 @@ on unload:
   # 상점 관련 정보 제거
   delete {S.Menu::*}
 
-command /shop:
+command /shop [<text>]:
   trigger:
-    if {S.Menu::*} is set:
-      open "CHEST" with 6 rows named "{@ShopMenuPrefix}" to player
+    if arg 1 is not set:
+      if {S.Menu::*} is set:
+        open "CHEST" with 6 rows named "{@ShopMenuPrefix}" to player
 
-      loop {S.Menu::*}:
-        set slot {S.Menu::%loop-index%.Parse::3} parsed as number of current inventory of player to {S.Menu::%loop-index%.Parse::4} parsed as itemtype named {S.Menu::%loop-index%.info.name} with lore {S.Menu::%loop-index%.info.lore::*}
-    else:
-      send "상점 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
+        loop {S.Menu::*}:
+          set slot {S.Menu::%loop-index%.Parse::3} parsed as number of current inventory of player to {S.Menu::%loop-index%.Parse::4} parsed as itemtype named {S.Menu::%loop-index%.info.name} with lore {S.Menu::%loop-index%.info.lore::*}
+      else:
+        send "상점 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
+    else if arg 1 is "reload":
+      make player execute command "/sk reload %script%"
 
 # 상점 메뉴 부분
 on player inventory click:
