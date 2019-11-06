@@ -12,15 +12,15 @@ on load:
     # 상점 파일의 내용을 변수로 갱신
     set {S.Menu::*} to file contents of "{@ShopMenuTxt}"
     loop {S.Menu::*}:
-      set {S.Menus::%loop-index%.Parse::*} to loop-value split by "_"
-      set {S.Menus::%loop-index%.info.name} to "<white><bold>%{S.Menus::%loop-index%.Parse::2}% 열기"
-      set {S.Menus::%loop-index%.info.lore::*} to "" and "<green>[좌클릭] <pink>%{S.Menus::%loop-index%.Parse::2}%을 엽니다."
+      set {S.Menu::%loop-index%.Parse::*} to loop-value split by "_"
+      set {S.Menu::%loop-index%.info.name} to "<white><bold>%{S.Menu::%loop-index%.Parse::2}% 열기"
+      set {S.Menu::%loop-index%.info.lore::*} to "" and "<green>[좌클릭] <pink>%{S.Menu::%loop-index%.Parse::2}%을 엽니다."
 
-      set {_ShopItemsDirect} to "{@ShopPrefixDirect}%{S.Menus::%loop-index%.Parse::1}%"
+      set {_ShopItemsDirect} to "{@ShopPrefixDirect}%{S.Menu::%loop-index%.Parse::1}%"
       if file "%{_ShopItemsDirect}%" exists:
-        set {S.Menus::%loop-index%.Items::*} to file contents of "%{_ShopItemsDirect}%"
-        loop {S.Menus::%loop-index%.Items::*}:
-          set {S.Menus::%loop-index-1%.Items::%loop-index-2%.Parse::*} to loop-value-2 split by "_"
+        set {S.Menu::%loop-index%.Items::*} to file contents of "%{_ShopItemsDirect}%"
+        loop {S.Menu::%loop-index%.Items::*}:
+          set {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::*} to loop-value-2 split by "_"
   # 콘솔에 로드 완료되었다는 문구 출력
   send "[%script%] Successfully loaded." to console
 
@@ -34,7 +34,7 @@ command /shop:
       open "CHEST" with 6 rows named "{@ShopMenuPrefix}" to player
 
       loop {S.Menu::*}:
-        set slot {S.Menus::%loop-index%.Parse::3} parsed as number of current inventory of player to {S.Menus::%loop-index%.Parse::4} parsed as itemtype named {S.Menus::%loop-index%.info.name} with lore {S.Menus::%loop-index%.info.lore::*}
+        set slot {S.Menu::%loop-index%.Parse::3} parsed as number of current inventory of player to {S.Menu::%loop-index%.Parse::4} parsed as itemtype named {S.Menu::%loop-index%.info.name} with lore {S.Menu::%loop-index%.info.lore::*}
     else:
       send "상점 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
 
@@ -43,14 +43,14 @@ on player inventory click:
   if inventory name is "{@ShopMenuPrefix}":
     cancel event
     loop {S.Menu::*}:
-      if {S.Menus::%loop-index%.info.name} contain name of clicked item:
+      if {S.Menu::%loop-index%.info.name} contain name of clicked item:
         close player's inventory
 
         set {S.Menu.%uuid of player%.Select} to loop-index
-        open "CHEST" with 6 rows named "{@ShopItemPrefix} %{S.Menus::%loop-index%.Parse::2}%" to player
-        if {S.Menus::%loop-index%.Items::*} is set:
-          loop {S.Menus::%loop-index%.Items::*}:
-            set slot {S.Menus::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menus::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{S.Menus::%loop-index-1%.Items::%loop-index-2%.Parse::4}%" and "&a[ &f판매가격 &a] &f%{S.Menus::%loop-index-1%.Items::%loop-index-2%.Parse::5}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"
+        open "CHEST" with 6 rows named "{@ShopItemPrefix} %{S.Menu::%loop-index%.Parse::2}%" to player
+        if {S.Menu::%loop-index%.Items::*} is set:
+          loop {S.Menu::%loop-index%.Items::*}:
+            set slot {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4}%" and "&a[ &f판매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"
         else:
           send "상점 서브 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
 
@@ -62,8 +62,8 @@ on player inventory click:
   if inventory name contains "{@ShopItemPrefix}":
     cancel event
     
-    loop {S.Menus::%{S.Menu.%uuid of player%.Select}%.Items::*}:
-      set {_currentItemParsed::*} to {S.Menus::%{S.Menu.%uuid of player%.Select}%.Items::%loop-index%.Parse::*}
+    loop {S.Menu::%{S.Menu.%uuid of player%.Select}%.Items::*}:
+      set {_currentItemParsed::*} to {S.Menu::%{S.Menu.%uuid of player%.Select}%.Items::%loop-index%.Parse::*}
       set {_controlBlock} to {_currentItemParsed::2} parsed as itemtype
 
       if clicked item is {_controlBlock}:
@@ -88,20 +88,18 @@ on player inventory click:
 
               loop all items in player's inventory:
                 if loop-item is {_controlBlock}:
-                  set {_nameOfItem} to name of loop-item
-                  remove 64 of loop-item named {_nameOfItem} from player
+                  remove 64 of loop-item from player
             else:                                 # RIGHT
               loop all items in player's inventory:
                 send "%loop-item%" to console
                 if loop-item is {_controlBlock}:
-                  set {_nameOfItem} to name of loop-item
-                  if number of loop-item named {_nameOfItem} in the player's inventory >= 64:
+                  if number of loop-item in the player's inventory >= 64:
                     set {_controlBlock.count} to 64
                   else:
                     set {_controlBlock.count} to 1
-                  remove {_controlBlock.count} of loop-item named {_nameOfItem} from player
+                  set {_controlBlock.amount} to {_currentItemParsed::5} parsed as number * {_controlBlock.count}
+                  remove {_controlBlock.count} of loop-item from player
                   exit loop
-              set {_controlBlock.amount} to {_currentItemParsed::5} parsed as number * {_controlBlock.count}
             add {_controlBlock.amount} to {data.%uuid of player%.{@CODE}::money}
             send "{@ShopPrefix} &a%{_currentItemParsed::2}% &6%{_controlBlock.count}%개&a를 &6%{_controlBlock.amount}%&6원&a에 판매하셨습니다."
           else:
@@ -110,5 +108,9 @@ on player inventory click:
 
       # if name of clicked item is "&c닫기":
       #   close player's inventory
+
+on inventory close:
+  if {S.Menu.%uuid of player%.Select} is set:
+    delete {S.Menu.%uuid of player%.Select}
 
 # set slot {_row} * 9 - 1 of current inventory of {_p} to Redstone Dust named "&c닫기"
