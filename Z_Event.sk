@@ -1,0 +1,24 @@
+on load:
+  send "[%script%] Successfully loaded." to console
+
+on rightclick on entity:
+  if "%event-entity%" is "Villager":
+    cancel event
+    wait 0.1 ticks
+    send "&6[Server]&8> &7주민을 사용할 수 없습니다!" to player
+
+on craft:
+  # 폭죽 로켓 금지
+  set {_craftItemName} to "%event-item%"
+  if {_craftItemName} contain "firework rockets":
+    send "&6[Server]&8> &7제작할 수 없는 아이템입니다!" to player
+    stop  
+
+  # 관측기, 엔더의 눈, 엔더 상자, 마법 부여대 금지
+  set {_blockItems} to "observer||enchanting table||ender chest||ender eye"
+  set {_blockItems::*} to {_blockItems} split at "||"
+  loop {_blockItems::*}:
+    if event-item is loop-value parsed as itemtype:
+      cancel event
+      send "&6[Server]&8> &7제작할 수 없는 아이템입니다!" to player
+      stop
