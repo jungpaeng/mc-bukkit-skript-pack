@@ -1,0 +1,102 @@
+options:
+  Version: V1.0
+  CODE: playerData
+  Starting_Balance: 0
+
+on load: #! 콘솔에 로드 띄우기
+  send "[%script%] Successfully loaded." to console
+
+on join:
+  # 기존 변수를 제거하고, 새로운 변수에 노출합니다.
+  if {money::%player%} is not set:
+    if {data.%uuid of player%.{@CODE}::money} is not set:
+      set {data.%uuid of player%.{@CODE}::money} to {@Starting_Balance}
+  else:
+    set {data.%uuid of player%.{@CODE}::money} to {money::%player%}
+    delete {money::%player%}
+
+on rightclick with paper:
+  if "%lore of tool of player%" contains "&e&l[화폐]":
+    set {_M.ToolItem} to player's held item
+    set {_M.ToolItem.String} to "%{_M.ToolItem}%"
+    set {_M.ToolItem.Length::*} to {_M.ToolItem.String} split at "piece"
+    set {_M.ToolItem.Name} to name of {_M.ToolItem}
+    
+    loop all items in the player's inventory:
+      if loop-item is {_M.ToolItem}:
+        cancel the event
+        set {_M.ToolItem.Name::*} to {_M.ToolItem.Name} split at "$"
+        if {_M.ToolItem.Length::1} parsed as number > 1:
+          set {_M.ToolItem.Length} to {_M.ToolItem.Length::1} parsed as number
+        else:
+          set {_M.ToolItem.Length} to 1
+        set {_money.total::%player%} to {_M.ToolItem.Length} * {_M.ToolItem.Name::2} parsed as number
+        remove player's held item from player
+        add {_money.total::%player%} to {data.%uuid of player%.{@CODE}::money}
+        send "%{_money.total::%player%}%원이 입금되었습니다." to player
+        exit loop
+
+# 아이템 이름 변경 금지
+on inventory click:
+  if inventory name is "Repair & Name":
+    if "%lore of clicked item%" contains "&e&l[화폐]":
+      cancel event
+
+command /money [<text>] [<offlineplayer>] [<integer>]:
+  trigger:
+    if arg 1 is not set:
+      make player execute command "/money help"
+    if arg 1 is "help":
+      send "&8&m----------------&r &6✎ &e&lMoneyEconomy&r &6✐ &8&m----------------"
+      send " &a/money show &8| &7소지한 돈을 확인합니다."
+      send " &a/money show <player> &8| &7해당 플레이어가 소지한 돈을 확인합니다."
+      send " &a/money give <player> <money> &8| &7해당 플레이어에게 돈을 보냅니다."
+      if player is op:
+        send " &a/money put <player> <money> &8| &7[op command] 해당 플레이어에게 돈을 보냅니다."
+      send " &a/exchange <money> &8| &7소지한 돈을 소모하여 현물화를 합니다. 우클릭해서 사용할 수 있습니다."
+    else if arg 1 is "show":
+      if arg 2 is not set:
+        send "&7소지 금액 : &a%{data.%uuid of player%.{@CODE}::money}%&7원"
+      else if arg 2 is a offline player:
+        if {data.%uuid of arg-2%.{@CODE}::money} is set:
+          send "&7%arg 2%님의 소지 금액 : &a%{data.%uuid of arg-2%.{@CODE}::money}%&7원"
+        else:
+          send "%arg 2%님은 서버에 접속한 적이 없습니다."
+    else if arg 1 is "give":
+      if arg 2 is not set:
+        send "&7플레이어를 입력해주세요"
+      else if {data.%uuid of arg-2%.{@CODE}::money} is not set:
+        send "%arg 2%님은 서버에 접속한 적이 없습니다."
+      else if arg 3 <= 0:
+        send "0 이상의 금액을 입력 부탁드립니다."
+      else if {data.%uuid of player%.{@CODE}::money} >= arg 3:
+        send "%arg 3%원을 %arg 2%에게 송금합니다." to player
+        send "%player%로부터 %arg 3%원이 입금되었습니다." to arg-2
+        remove arg-3 from {data.%uuid of player%.{@CODE}::money}
+        add arg-3 to {data.%uuid of arg-2%.{@CODE}::money}
+      else:
+        send "소유한 금액이 부족합니다. 소지한 금액: %{data.%uuid of player%.{@CODE}::money}%"
+    else if arg 1 is "put":
+      if player is op:
+        if arg 2 is not set:
+          send "&7플레이어를 입력해주세요"
+        else if {data.%uuid of arg-2%.{@CODE}::money} is not set:
+          send "%arg 2%님은 서버에 접속한 적이 없습니다."
+        else if arg 3 is set:
+          send "%arg 3%원을 %arg 2%에게 송금합니다." to player
+          send "관리자 %player%로부터 %arg 3%원이 입금되었습니다." to arg-2
+          add arg-3 to {data.%uuid of arg-2%.{@CODE}::money}
+    else:
+      send "&7명령어를 확인해주세요 &a/money help"
+      make player execute command "/money help"
+
+command /exchange [<integer>]:
+  trigger:
+    if arg 1 is not set:
+      send "&7금액을 입력해주세요"
+    else if {data.%uuid of player%.{@CODE}::money} >= arg 1:
+      give paper named "&a&o$%arg 1%" with lore "&e&l[화폐]" and "<yellow>이 화폐는 %player%으로부터 발행되었습니다", "",  "<white>────────────────────", "<purple><bold>좌클릭<white>: %arg 1%원을 획득할 수 있습니다." to player
+      remove arg-1 from {data.%uuid of player%.{@CODE}::money}
+      send "%arg 1%원을 출금하였습니다." to player
+    else:
+      send "소유한 금액이 부족합니다. 소지한 금액: %{data.%uuid of player%.{@CODE}::money}%"
