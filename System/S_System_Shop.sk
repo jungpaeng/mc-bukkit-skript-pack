@@ -106,9 +106,9 @@ on player inventory click:
             send "{@ShopPrefix} &c'%{_currentItemParsed::2}%&c'이 부족합니다."
         stop
 
-      if clicked item is {@ButtonGoMainPage}:
-        close player's inventory
-        make player execute command "/shop"
+    if clicked item is {@ButtonGoMainPage}:
+      close player's inventory
+      make player execute command "/shop"
 
 
 on inventory close:
