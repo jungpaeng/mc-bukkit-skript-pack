@@ -52,7 +52,15 @@ on player inventory click:
         open "CHEST" with 6 rows named "{@ShopItemPrefix} %{S.Menu::%loop-index%.Parse::2}%" to player
         if {S.Menu::%loop-index%.Items::*} is set:
           loop {S.Menu::%loop-index%.Items::*}:
-            set slot {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4}%" and "&a[ &f판매가격 &a] &f%{S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"  
+            if {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4} parsed as number > 0:
+              set {_buyAmount} to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::4}
+            else:
+              set {_buyAmount} to "<red><bold>구매 불가"
+            if {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5} parsed as number > 0:
+              set {_sellAmount} to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::5}
+            else:
+              set {_sellAmount} to "<red><bold>판매 불가"
+            set slot {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::1} parsed as number of current inventory of player to {S.Menu::%loop-index-1%.Items::%loop-index-2%.Parse::2} parsed as itemtype with lore "&a[ &f구매가격 &a] &f%{_buyAmount}%" and "&a[ &f판매가격 &a] &f%{_sellAmount}%", "", "&d< &f이용 방법 &d>","&e&l└ &f좌클릭 시 구매 | &f우클릭 시 판매","&e&l- &fSHIFT + 좌클릭 | 64개구매","&e&l- &fSHIFT + 우클릭 | 모두판매"  
           set slot 49 of current inventory of player to {@ButtonGoMainPage}
         else:
           send "상점 서브 파일이 존재하지 않습니다. 관리자에게 문의해주세요."
@@ -68,6 +76,9 @@ on player inventory click:
 
       if clicked item is {_controlBlock}:
         if "%click type%" contains "LEFT":
+          if {_currentItemParsed::4} parsed as number <= 0:
+            send "{@ShopPrefix} <light red><bold>구매할 수 없는 아이템입니다."
+            stop
           if "%click type%" contains "SHIFT":   # SHIFT - LEFT
             set {_controlBlock.count} to 64
           else:                                 # LEFT
@@ -80,7 +91,11 @@ on player inventory click:
             send "{@ShopPrefix} &a%{_currentItemParsed::2}% &6%{_controlBlock.count}%&6개&a를 &6%{_controlBlock.amount}%&6원&a에 구입하셨습니다."
           else:
             send "{@ShopPrefix} <light red>소지한 금액이 <light green>%{_controlBlock.amount}%<light green>원<light red>보다 적습니다."
+          stop
         else if "%click type%" contains "RIGHT":
+          if {_currentItemParsed::5} parsed as number <= 0:
+            send "{@ShopPrefix} <light red><bold>판매할 수 없는 아이템입니다."
+            stop
           if number of {_controlBlock} in the player's inventory >= 1:
             if "%click type%" contains "SHIFT":   # SHIFT - RIGHT
               set {_controlBlock.count} to number of {_controlBlock} in the player's inventory
