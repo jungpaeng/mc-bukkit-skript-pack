@@ -37,3 +37,12 @@ function saveValueToYaml(pu: text, code: text):
     loop {data.%{_pu}%.%{_code}%::*}:
       set yaml value loop-index from {_dir} to loop-value
       delete {data.%{_pu}%.%{_code}%::%loop-index%}
+
+function getTotalExperience(xp: number) :: number:
+  if {_xp} < 17:
+    set {_totalExperience} to {_xp} * {_xp} + 6 * {_xp}
+  else if {_xp} < 32:
+    set {_totalExperience} to 2.5 * {_xp} * {_xp} - 40.5 * {_xp} + 360
+  else:
+    set {_totalExperience} to 4.5 * {_xp} * {_xp} - 162.5 * {_xp} + 2220
+  return {_totalExperience}
