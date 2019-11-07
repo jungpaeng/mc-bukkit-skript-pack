@@ -1,0 +1,80 @@
+#=========
+#    Options 
+#=========
+Options:
+	p: &8[&cExperience Bank&8]
+
+#===========================================================================
+# Experience Bank CODE
+#===========================================================================
+command /expbank [<text>] [<text>] [<text>]:
+  aliases: /expbank
+  trigger:
+    if arg 1 is not set:
+      make player execute command "/expbank help"
+    if arg 1 is "help":
+      send "&8&m=====[&r &cExperience Bank &7&oCoded by Jungpaeng &8&m]====="
+      send "&a( ) = 필수 값 &7| &a[ ] = 옵션 값"
+      send "&a/expbank save (level) &7레벨에 해당하는 경험치를 아이템으로 저장합니다."
+      player is op:
+        send "&a/expbank reload &7스크립트를 다시 로드합니다."
+    if arg 1 is "save":
+      if arg 2 is not set:
+        send "{@p} &c필수 값이 없습니다. usage: /expbank save (level)"
+      else:
+        if arg 2 parsed as number < 0:
+          send "{@p} &c자연수를 입력해주세요."
+        else:
+          set {_usedExperience} to arg 2 parsed as number
+          set {_totalExperience} to getTotalExperience({_usedExperience})
+          if level of player >= {_usedExperience}:
+            if arg 3 == "certified":
+              player is op:
+                give paper named "&7[&c정품&7] &a&oLevel::%{_usedExperience}%" with lore "&e&l[경험치]" and "&e&l└ &f우클릭 시 레벨에 해당하는 경험치를 획득합니다.", "&e&l- &f공식 상점에서 구매하는 경우: 90%% 획득" to player
+              else:
+                give paper named "&7[&c%player%&7] &a&oLevel::%{_usedExperience}%" with lore "&e&l[경험치]" and "&e&l└ &f우클릭 시 레벨에 해당하는 경험치를 획득합니다.", "&e&l- &f본인의 경험치를 획득하는 경우: 50%% 획득", "&e&l- &f타인의 경험치를 획득하는 경우: 0 획득" to player
+            else:
+              give paper named "&7[&c%player%&7] &a&oLevel::%{_usedExperience}%" with lore "&e&l[경험치]" and "&e&l└ &f우클릭 시 레벨에 해당하는 경험치를 획득합니다.", "&e&l- &f본인의 경험치를 획득하는 경우: 50%% 획득", "&e&l- &f타인의 경험치를 획득하는 경우: 0 획득" to player
+            make console execute command "/xp add %player% -%{_totalExperience}%"
+            send "레벨 %{_usedExperience}%에 해당하는 경험치 %{_totalExperience}%를 저장하였습니다!"
+          else:
+            send "당신의 레벨이 %{_usedExperience}%보다 적습니다!!"
+
+on rightclick with paper:
+  if "%lore of tool of player%" contains "&e&l[경험치]":
+    set {_M.ToolItem} to player's held item
+    set {_M.ToolItem.String} to "%{_M.ToolItem}%"
+    set {_M.ToolItem.Length::*} to {_M.ToolItem.String} split at "piece"
+    set {_M.ToolItem.Name} to name of {_M.ToolItem}
+    
+    loop all items in the player's inventory:
+      if loop-item is {_M.ToolItem}:
+        cancel the event
+        set {_M.ToolItem.Name::*} to {_M.ToolItem.Name} split at " &a&oLevel::"
+        if {_M.ToolItem.Length::1} parsed as number > 1:
+          set {_M.ToolItem.Length} to {_M.ToolItem.Length::1} parsed as number
+        else:
+          set {_M.ToolItem.Length} to 1
+        set {_getTotalExperience} to getTotalExperience({_M.ToolItem.Name::2} parsed as number) * {_M.ToolItem.Length}
+        if {_M.ToolItem.Name::1} == "&7[&c정품&7]":
+          set {_calcTotalExperience} to {_getTotalExperience} * 90 / 100
+          send "정품 상점에서 구매한 경험치 &a%rounded down {_calcTotalExperience}%를 획득합니다!"
+        else if {_M.ToolItem.Name::1} == "&7[&c%player%&7]":
+          set {_calcTotalExperience} to {_getTotalExperience} * 50 / 100
+          send "저장한 경험치 &a%rounded down {_calcTotalExperience}%를 획득합니다!"
+        else:
+          set {_calcTotalExperience} to 0
+          send "타인의 경험치는 획득할 수 없습니다! 아이템은 소멸됩니다."
+        set {_roundDownExperience} to rounded down {_calcTotalExperience}
+        set slot index of loop-item of player's inventory to air
+        make console execute command "/xp add %player% %{_roundDownExperience}%"
+        exit loop
+
+function getTotalExperience(xp: number) :: number:
+  if {_xp} < 17:
+    set {_totalExperience} to {_xp} * {_xp} + 6 * {_xp}
+  else if {_xp} < 32:
+    set {_totalExperience} to 2.5 * {_xp} * {_xp} - 40.5 * {_xp} + 360
+  else:
+    set {_totalExperience} to 4.5 * {_xp} * {_xp} - 162.5 * {_xp} + 2220
+  return {_totalExperience}
