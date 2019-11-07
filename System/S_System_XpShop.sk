@@ -1,0 +1,33 @@
+options:
+  ShopPrefix: &6[&f상점&6]&r
+  ShopItemPrefix: <light red><bold>[XP Shop-Item]<black>
+  CODE: playerData
+
+  # 인챈트 뽑기 북 아이템 코드 저장
+  EnchantRandomBox: glowing paper named "<green>[인챈트 뽑기 북]" with lore "" and "<light red>[구매 가격] <light green>Level 30", "<light red><bold>해당 아이템은 판매할 수 없습니다."
+  EnchantRandomBox.NeedLevel: 30
+  EnchantRandomBox.UsedItem: glowing paper named "<green>[인챈트 뽑기 북]" with lore "" and "<light red>[좌클릭] <white>랜덤 인챈트북을 하나 뽑습니다."
+
+on load:
+  send "[%script%] Successfully loaded." to console
+
+on unload:
+  # 경험치 상점 관련 정보 제거
+  delete {XPS.Menu::*}
+
+command /xp-shop:
+  trigger:
+    open "CHEST" with 3 rows named "{@ShopItemPrefix} <green>Level: %level of player%" to player
+    set slot 13 of current inventory of player to {@EnchantRandomBox}
+
+# 상점 클릭 부분
+on player inventory click:
+  if inventory name contain "{@ShopItemPrefix}":
+    cancel event
+
+    if clicked item is {@EnchantRandomBox}:
+      if level of player >= {@EnchantRandomBox.NeedLevel}:
+        make console execute command "/xp add %player% -%getTotalExperience({@EnchantRandomBox.NeedLevel})%"
+        give 1 of {@EnchantRandomBox.UsedItem} to player
+      else:
+        send "{@ShopPrefix} <light red>보유중인 레벨이 부족합니다."
