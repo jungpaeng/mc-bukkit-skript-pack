@@ -12,10 +12,12 @@ on craft:
   set {_craftItemName} to "%event-item%"
   if {_craftItemName} contain "firework rockets":
     send "&6[Server]&8> &7제작할 수 없는 아이템입니다!" to player
-    stop  
+    stop
+
+  send "%event-item%" to player
 
   # 관측기, 엔더의 눈, 엔더 상자, 마법 부여대 금지
-  set {_blockItems} to "observer||enchanting table||ender chest||ender eye"
+  set {_blockItems} to "observer||enchanting table||ender chest||ender eye||wood hee||stone hoe||iron hoe||gold hoe||diamond hoe"
   set {_blockItems::*} to {_blockItems} split at "||"
   loop {_blockItems::*}:
     if event-item is loop-value parsed as itemtype:
