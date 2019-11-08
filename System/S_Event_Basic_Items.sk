@@ -1,0 +1,12 @@
+options:
+  CODE: playerData
+
+on load:
+  send "[%script%] Successfully loaded." to console
+  set {dbDirect::playerData} to "plugins/Skript/scripts/DB/PlayerData"
+
+on join:
+  if {data.%uuid of player%.{@CODE}::basicItems} is not true:
+    give ender chest to player
+    make console execute command "/give %player% minecraft:diamond_hoe{Damage:1241}"
+    set {data.%uuid of player%.{@CODE}::basicItems} to true
