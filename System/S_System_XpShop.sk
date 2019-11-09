@@ -47,188 +47,188 @@ on rightclick with paper:
       set {_enchant.sub.number} to a random integer between 1 and 13
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Fire Protection 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:1}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Blast Protection 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:1}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Projectile Protection 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:1}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Thorns 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:1}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Frost Walker 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""frost_walker"",lvl:1}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Knockback 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""knockback"",lvl:1}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Fire Aspect 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_aspect"",lvl:1}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Punch 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""punch"",lvl:1}]}"
       else if {_enchant.sub.number} is 9:
-        give 1 of enchanted book of Loyalty 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:1}]}"
       else if {_enchant.sub.number} is 10:
-        give 1 of enchanted book of Impaling 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:1}]}"
       else if {_enchant.sub.number} is 11:
-        give 1 of enchanted book of Riptide 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:1}]}"
       else if {_enchant.sub.number} is 12:
-        give 1 of enchanted book of Quick Charge 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:1}]}"
       else if {_enchant.sub.number} is 13:
-        give 1 of enchanted book of Piercing 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:1}]}"
     else if {_enchant.number} < 4318:
       # Level.2
       set {_enchant.sub.number} to a random integer between 1 and 17
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Protection 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:1}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Respiration 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:1}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Depth Strider 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:1}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Sharpness 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:1}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Smite 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:1}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Bane of Arthropods 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:1}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Looting 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:1}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Sweeping Edge 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:1}]}"
       else if {_enchant.sub.number} is 9:
-        give 1 of enchanted book of Efficiency 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:1}]}"
       else if {_enchant.sub.number} is 10:
-        give 1 of enchanted book of Unbreaking 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:1}]}"
       else if {_enchant.sub.number} is 11:
-        give 1 of enchanted book of Fortune 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:1}]}"
       else if {_enchant.sub.number} is 12:
-        give 1 of enchanted book of Power 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:1}]}"
       else if {_enchant.sub.number} is 13:
-        give 1 of enchanted book of Lure 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:1}]}"
       else if {_enchant.sub.number} is 14:
-        give 1 of enchanted book of Channeling 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""channeling"",lvl:1}]}"
       else if {_enchant.sub.number} is 15:
-        give 1 of enchanted book of Multishot 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""multishot"",lvl:1}]}"
       else if {_enchant.sub.number} is 16:
-        give 1 of enchanted book of Feather Falling 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:1}]}"
       else if {_enchant.sub.number} is 17:
-        give 1 of enchanted book of Luck of the Sea 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:1}]}"
     else if {_enchant.number} < 5886:
       # Level.3
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Fire Protection 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:2}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Blast Protection 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:2}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Projectile Protection 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:2}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Thorns 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:2}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Loyalty 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:2}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Impaling 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:2}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Riptide 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:2}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Quick Charge 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:2}]}"
       else if {_enchant.sub.number} is 9:
-        give 1 of enchanted book of Piercing 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:2}]}"
     else if {_enchant.number} < 7193:
       # Level.4
       set {_enchant.sub.number} to a random integer between 1 and 19
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Protection 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:2}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Respiration 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:2}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Depth Strider 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:2}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Sharpness 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:2}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Smite 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:2}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Bane of Arthropods 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:2}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Looting 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:2}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Sweeping Edge 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:2}]}"
       else if {_enchant.sub.number} is 9:
-        give 1 of enchanted book of Efficiency 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:2}]}"
       else if {_enchant.sub.number} is 10:
-        give 1 of enchanted book of Unbreaking 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:2}]}"
       else if {_enchant.sub.number} is 11:
-        give 1 of enchanted book of Fortune 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:2}]}"
       else if {_enchant.sub.number} is 12:
-        give 1 of enchanted book of Power 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:2}]}"
       else if {_enchant.sub.number} is 13:
-        give 1 of enchanted book of Flame 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""flame"",lvl:1}]}"
       else if {_enchant.sub.number} is 14:
-        give 1 of enchanted book of Infinity 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""infinity"",lvl:1}]}"
       else if {_enchant.sub.number} is 15:
-        give 1 of enchanted book of Luck of the Sea 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:2}]}"
       else if {_enchant.sub.number} is 16:
-        give 1 of enchanted book of Lure 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:2}]}"
       else if {_enchant.sub.number} is 17:
-        give 1 of enchanted book of Impaling 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:3}]}"
       else if {_enchant.sub.number} is 18:
-        give 1 of enchanted book of Piercing 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:3}]}"
       else if {_enchant.sub.number} is 19:
-        give 1 of enchanted book of Feather Falling 2 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:2}]}"
     else if {_enchant.number} < 8173:
       # Level.5
       set {_enchant.sub.number} to a random integer between 1 and 8
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Aqua Affinity 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""aqua_affinity"",lvl:1}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Sharpness 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:3}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Smite 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:3}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Bane of Arthropods 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:3}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Efficiency 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:3}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Silk Touch 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""silk_touch"",lvl:1}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Power 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:3}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Impaling 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:4}]}"
     else if {_enchant.number} < 8957:
       # Level.6
       set {_enchant.sub.number} to a random integer between 1 and 3
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Fire Protection 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:3}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Blast Protection 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:3}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Projectile Protection 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:3}]}"
     else if {_enchant.number} < 9610:
       # Level.7
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
-        give 1 of enchanted book of Protection 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:3}]}"
       else if {_enchant.sub.number} is 2:
-        give 1 of enchanted book of Curse of Binding 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""binding_curse"",lvl:1}]}"
       else if {_enchant.sub.number} is 3:
-        give 1 of enchanted book of Curse of Vanishing 1 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""vanishing_curse"",lvl:1}]}"
       else if {_enchant.sub.number} is 4:
-        give 1 of enchanted book of Sharpness 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:4}]}"
       else if {_enchant.sub.number} is 5:
-        give 1 of enchanted book of Smite 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:4}]}"
       else if {_enchant.sub.number} is 6:
-        give 1 of enchanted book of Bane of Arthropods 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:4}]}"
       else if {_enchant.sub.number} is 7:
-        give 1 of enchanted book of Efficiency 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:4}]}"
       else if {_enchant.sub.number} is 8:
-        give 1 of enchanted book of Power 4 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:4}]}"
       else if {_enchant.sub.number} is 9:
-        give 1 of enchanted book of Feather Falling 3 to player
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:3}]}"
     else if {_enchant.number} < 9936:
       # Level.8
-      give 1 of enchanted book of Mending 1 to player
+      give player enchanted book with nbt "{StoredEnchantments:[{id:""mending"",lvl:1}]}"
     else if {_enchant.number} < 10001:
       # Level.9
       give 1 of {@AdminKissItem} to player
