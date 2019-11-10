@@ -66,16 +66,16 @@ command /dailyItem [<text>]:
   trigger:
     if arg-1 is not set:
       make player execute command "/dailyItem help"
-    if arg 1 is "help":
+    else if arg 1 is "help":
       send "&8&m----------------&r &6✎ &e&lDaily Items&r &6✐ &8&m----------------"
       send " &a/dailyItem get &8| &7출석 체크 아이템을 받을 수 있는 창을 노축합니다."
       if player is op:
         send " &a/dailyItem set &8| &7출석 체크 아이템을 설정할 수 있는 창을 노축합니다."
-        send " &a/dailyItem clear &8| &7[테스트용] 출석 체크 아이템을 받았다는 기록을 지웁니다."
-    if arg-1 is "set":
+        send " &a/dailyItem clear &8| &7모든 유저의 출석 일차를 1일차로 변경합니다."
+    else if arg-1 is "set":
       if player is op:
         DailyItem_SetItem(player)
-    if arg-1 is "get":
+    else if arg-1 is "get":
       renewPlayerPlayTime(uuid of player)
 
       # 플레이어의 하루 접속 시간이 1시간 이상인 경우에만 지급
@@ -86,8 +86,14 @@ command /dailyItem [<text>]:
         send "{@text.prefix} %{data.%uuid of player%.playerdata::dailyitems.today}%일차 아이템을 받으려면 내일 다시 찾아주세요" to player
       else:
         DailyItem_GetItem(player)
-    if arg-1 is "clear":
-      set {data.%uuid of player%.playerdata::dailyitems.lasttime} to "180828"
+    else if arg-1 is "clear":
+      if player is op:
+        loop {info.user::*}:
+          send "[Player] %{data.%loop-index%.playerdata::dailyitems.today}%" to player
+          set {data.%loop-index%.playerdata::dailyitems.today} to 1
+    else if arg 1 is "reload":
+      if player is op:
+        make player execute command "/sk reload %script%"
 
 on inventory click: #! 아이템 세팅 인벤토리 닫기
   if inventory name is "{@inven.setting}":
