@@ -89,8 +89,9 @@ command /dailyItem [<text>]:
     else if arg-1 is "clear":
       if player is op:
         loop {info.user::*}:
-          send "[Player] %{data.%loop-index%.playerdata::dailyitems.today}%" to player
           set {data.%loop-index%.playerdata::dailyitems.today} to 1
+
+        send "&6[Server]&8> &7출석체크 접속 일차를 초기화하였습니다." to player
     else if arg 1 is "reload":
       if player is op:
         make player execute command "/sk reload %script%"

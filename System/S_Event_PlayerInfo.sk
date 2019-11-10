@@ -71,7 +71,14 @@ function renewPlayerPlayTime(pu: text):
 
 # 매 분마다, 현재 시간을 체크합니다.
 every minute:
-  if now formatted with "HH:mm" is "00:00":
+  if now formatted with "HH:mm" is "23:54":
+    broadcast "&6[Server]&8> &75분 뒤, 플레이어 접속 시간을 초기화합니다..."
+  if now formatted with "HH:mm" is "23:58":
+    broadcast "&6[Server]&8> &71분 뒤, 플레이어 접속 시간을 초기화합니다..."
+
+  if now formatted with "HH:mm" is "23:59" or "00:00":
+    broadcast "&6[Server]&8> &7플레이어 접속 시간을 초기화합니다..."
     loop all players:
-      set {playerInfo.join::%{_pu}%} to now
+      set {playerInfo.join::%uuid of loop-player%} to now
+      set {data.%uuid of loop-player%.{@CODE}::lastLogin} to {playerInfo.join::%uuid of loop-player%} formatted with "YYMMdd-HHmmss"
       delete {data.%uuid of loop-player%.{@CODE}::playTime.daily}
