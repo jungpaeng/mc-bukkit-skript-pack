@@ -103,8 +103,9 @@ on player inventory click:
             send "{@ShopPrefix} <light red>소지한 금액이 <light green>%{_controlBlock.amount}%<light green>원<light red>보다 적습니다."
         # RIGHT - 판매
         else if "%click type%" contains "RIGHT":
+          wait 1 tick
           if number of {_controlBlock} in the player's inventory < 1:
-            send "{@ShopPrefix} <light red><bold>소지하지 않은 아이템입니다.."
+            send "{@ShopPrefix} <light red><bold>소지하지 않은 아이템입니다.." to player
             stop    # 소지하지 않은 아이템을 판매할 수 없습니다.
           if {_clickedItem.Parsed::5} parsed as number <= 0:
             send "{@ShopPrefix} <light red><bold>판매할 수 없는 아이템입니다."
@@ -136,7 +137,7 @@ on player inventory click:
                 exit loop
 
           send "{@ShopPrefix} &a%{_clickedItem.Parsed::2}% &6%{_controlBlock.count}%개&a를 &6%{_controlBlock.amount}%&6원&a에 판매하셨습니다."
-          add {_controlBlock.amount} from {data.%uuid of player%.{@CODE}::money}
+          add {_controlBlock.amount} to {data.%uuid of player%.{@CODE}::money}
 
     if clicked item is {@ButtonGoMainPage}:
       close player's inventory
