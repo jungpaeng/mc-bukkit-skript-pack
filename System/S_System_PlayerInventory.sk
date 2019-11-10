@@ -1,0 +1,9 @@
+command /player-inventory [<offlineplayer>]:
+	trigger:
+		if player is op:
+			open "CHEST" with 6 rows named "[%arg 1%] Inventory" to player
+			set {_count} to 0
+			
+			loop all items in inventory of "%arg 1%" parsed as player:
+				add 1 to {_count}
+				set slot {_count} of current inventory of player to loop-item
