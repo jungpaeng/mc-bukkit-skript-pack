@@ -11,16 +11,49 @@ on craft:
   # 폭죽 로켓 금지
   set {_craftItemName} to "%event-item%"
   if {_craftItemName} contain "firework rockets":
+    cancel event
     send "&6[Server]&8> &7제작할 수 없는 아이템입니다!" to player
     stop
 
   send "%event-item%" to player
 
   # 관측기, 엔더의 눈, 엔더 상자, 마법 부여대 금지
-  set {_blockItems} to "observer||enchanting table||ender chest||ender eye||wood hee||stone hoe||iron hoe||gold hoe||diamond hoe"
+  set {_blockItems} to "observer||enchanting table||ender chest||ender eye||wood hoe||stone hoe||iron hoe||gold hoe||diamond hoe"
   set {_blockItems::*} to {_blockItems} split at "||"
   loop {_blockItems::*}:
     if event-item is loop-value parsed as itemtype:
       cancel event
       send "&6[Server]&8> &7제작할 수 없는 아이템입니다!" to player
       stop
+
+# 물고기 죽였을 때 드롭템 제거
+On death of salmon:
+  clear drops
+On death of puffer fish:
+  clear drops
+
+# 열대어 종류가 매우 많습니다
+On death of flopper:
+  clear drops
+On death of glitter:
+  clear drops
+On death of betty:
+  clear drops
+On death of stripey:
+  clear drops
+On death of blockfish:
+  clear drops
+On death of clayfish:
+  clear drops
+On death of kob:
+  clear drops
+On death of snooper:
+  clear drops
+On death of brinely:
+  clear drops
+On death of sunStreak:
+  clear drops
+On death of dasher:
+  clear drops
+On death of spotty:
+  clear drops
