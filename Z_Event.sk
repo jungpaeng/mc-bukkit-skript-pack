@@ -1,4 +1,6 @@
 on load:
+  register new shapeless recipe for diamond item named "괭이였던 것.." using diamond hoe, diamond hoe, air, air, air, air, air, air, air
+  register new shapeless recipe for stick item named "괭이였던 것.." using wooden hoe, wooden hoe, air, air, air, air, air, air, air
   send "[%script%] Successfully loaded." to console
 
 on rightclick on entity:
@@ -57,3 +59,9 @@ On death of dasher:
   clear drops
 On death of spotty:
   clear drops
+
+# 아이템 이름 변경 금지
+on inventory click:
+  if inventory name is "Repair & Name":
+    if clicked item is diamond hoe or wooden hoe:
+      cancel event
