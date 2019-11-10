@@ -1,0 +1,7 @@
+on fishing:
+  if "%state%" is "BITE":
+    send "물고기가 미끼를 물었습니다!"
+
+  if "%state%" is "CAUGHT_FISH":
+    delete caught item
+    drop cod at event-player
