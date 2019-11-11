@@ -7,7 +7,10 @@ options:
   EnchantRandomBox.NeedLevel: 30
   EnchantRandomBox.Name: <green>[Enchant Gacha Book]
   EnchantRandomBox.UsedItem: glowing paper named "<green>[Enchant Gacha Book]" with lore "" and "<light red>[우클릭] 인챈트 북을 랜덤으로 획득합니다."
-  EnchantRandomBox: glowing paper named "<green>[Enchant Gacha Book]" with lore "<white>인챈트 북을 랜덤으로 획득합니다.", "", "<light red>[구매 가격] <light green>Level 30", "<light red><bold>해당 아이템은 판매할 수 없습니다."
+  EnchantRandomBox: glowing paper named "<green>[Enchant Gacha Book]" with lore "<white>인챈트 북을 랜덤으로 획득합니다." and "", "<light red>[구매 가격] <light green>Level 30", "<light red><bold>해당 아이템은 판매할 수 없습니다."
+
+  EnchantBook.Name: <yellow>[Enchanted Book]
+  EnchantBook.Lore: "" and "<light red>> <white>인챈트북을 <light red>[모루]<white>에서 사용할 수 있습니다."
 
   AdminKissItem: glowing paper named "<green>[촌장과의 키스권]" with lore "" and "<white>관리자에게 가져가면 행운이..??"
 
@@ -17,23 +20,6 @@ on load:
 on unload:
   # 경험치 상점 관련 정보 제거
   delete {XPS.Menu::*}
-
-command /xp-shop:
-  trigger:
-    open "CHEST" with 3 rows named "{@ShopItemPrefix} <green>Level: %level of player%" to player
-    set slot 13 of current inventory of player to {@EnchantRandomBox}
-
-# 상점 클릭 부분
-on player inventory click:
-  if inventory name contain "{@ShopItemPrefix}":
-    cancel event
-
-    if clicked item is {@EnchantRandomBox}:
-      if level of player >= {@EnchantRandomBox.NeedLevel}:
-        make console execute command "/xp add %player% -%getTotalExperience({@EnchantRandomBox.NeedLevel})%"
-        give 1 of {@EnchantRandomBox.UsedItem} to player
-      else:
-        send "{@ShopPrefix} <light red>보유중인 레벨이 부족합니다."
 
 on rightclick with paper:
   if name of event-item contain "{@EnchantRandomBox.Name}":
@@ -47,188 +33,238 @@ on rightclick with paper:
       set {_enchant.sub.number} to a random integer between 1 and 13
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""frost_walker"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""frost_walker"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""knockback"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""knockback"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_aspect"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_aspect"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""punch"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""punch"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 9:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 10:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 11:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 12:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 13:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 4318:
       # Level.2
       set {_enchant.sub.number} to a random integer between 1 and 17
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 9:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 10:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 11:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 12:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 13:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 14:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""channeling"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""channeling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 15:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""multishot"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""multishot"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 16:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 17:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 5886:
       # Level.3
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 9:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 7193:
       # Level.4
       set {_enchant.sub.number} to a random integer between 1 and 19
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 9:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 10:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 11:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 12:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 13:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""flame"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""flame"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 14:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""infinity"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""infinity"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 15:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 16:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 17:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 18:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 19:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:2}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 8173:
       # Level.5
       set {_enchant.sub.number} to a random integer between 1 and 8
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""aqua_affinity"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""aqua_affinity"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""silk_touch"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""silk_touch"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 8957:
       # Level.6
       set {_enchant.sub.number} to a random integer between 1 and 3
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 9610:
       # Level.7
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 2:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""binding_curse"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""binding_curse"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 3:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""vanishing_curse"",lvl:1}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""vanishing_curse"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 4:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 5:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 6:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 7:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 8:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:4}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
       else if {_enchant.sub.number} is 9:
-        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:3}]}"
+        give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 9936:
       # Level.8
-      give player enchanted book with nbt "{StoredEnchantments:[{id:""mending"",lvl:1}]}"
+      give player enchanted book with nbt "{StoredEnchantments:[{id:""mending"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
     else if {_enchant.number} < 10001:
       # Level.9
       give 1 of {@AdminKissItem} to player
+
+on player inventory click:
+  # 상점 클릭 부분
+  if inventory name contain "{@ShopItemPrefix}":
+    cancel event
+
+    if clicked item is {@EnchantRandomBox}:
+      if level of player >= {@EnchantRandomBox.NeedLevel}:
+        make console execute command "/xp add %player% -%getTotalExperience({@EnchantRandomBox.NeedLevel})%"
+        give 1 of {@EnchantRandomBox.UsedItem} to player
+      else:
+        send "{@ShopPrefix} <light red>보유중인 레벨이 부족합니다."
+
+  # 기본 인챈트 북 사용 제한
+  if clicked item is enchanted book:
+    set {_enchantBook.lore::*} to {@EnchantBook.Lore}
+    set {_clickedItem} to clicked item
+
+    if "%lore of clicked item%" is not "%{_enchantBook.lore::*}%":
+      send "&6[Server]&8> &7사용할 수 없는 타입의 인챈트 북입니다." to player
+      cancel event
+      remove clicked item from player
+
+      if {xpShop.basicEnchant.use} is true:
+        give {_clickedItem} named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore} to player
+        send "&6[Server]&8> <light green>사용 가능한 인챈트 북을 지급하였습니다." to player
+
+command /xp-shop [<text>]:
+  trigger:
+    if arg 1 is not set:
+      open "CHEST" with 3 rows named "{@ShopItemPrefix} <green>Level: %level of player%" to player
+      set slot 13 of current inventory of player to {@EnchantRandomBox}
+    else if arg 1 is "help":
+      send "&8&m----------------&r &6✎ &e&lXP Shop&r &6✐ &8&m----------------"
+      send " &a/xp-shop status &8| &7기본 인챈트북 사용 가능 여부를 확인합니다."
+      # op 명령어는 숨겨둡니다.
+      if player is op:
+        send " &a/xp-shop basicBook &8| &7기본 인챈트 북 사용을 허용 설정" and "  &e&l└ &7기본 인챈트 북 사용을 비허용할시, 인챈트북을 클릭하면 제거됩니다."
+    else if arg 1 is "status":
+      if {xpShop.basicEnchant.use} is true:
+        send "&6[Server]&8> <light green>기본 인챈트 북을 사용할 수 있습니다!" to player
+      else:
+        send "&6[Server]&8> 기본 인챈트 북을 사용할 수 없습니다.." to player
+    else if arg 1 is "basicBook":
+      if {xpShop.basicEnchant.use} is true:
+        set {xpShop.basicEnchant.use} to false
+        send "&6[Server]&8> 기본 인챈트 사용할 수 없도록 변경하였습니다!" to player
+      else:
+        set {xpShop.basicEnchant.use} to true
+        send "&6[Server]&8> <light green>기본 인챈트 사용할 수 있도록 변경하였습니다!" to player
