@@ -46,7 +46,7 @@ command /money [<text>] [<offlineplayer>] [<integer>]:
   trigger:
     if arg 1 is not set:
       make player execute command "/money help"
-    if arg 1 is "help":
+    else if arg 1 is "help":
       send "&8&m----------------&r &6✎ &e&lMoneyEconomy&r &6✐ &8&m----------------"
       send " &a/money show &8| &7소지한 돈을 확인합니다."
       send " &a/money show <player> &8| &7해당 플레이어가 소지한 돈을 확인합니다."
@@ -86,6 +86,14 @@ command /money [<text>] [<offlineplayer>] [<integer>]:
           send "%arg 3%원을 %arg 2%에게 송금합니다." to player
           send "관리자 %player%로부터 %arg 3%원이 입금되었습니다." to arg-2
           add arg-3 to {data.%uuid of arg-2%.{@CODE}::money}
+    else if arg 1 is "flex":
+      if arg 2 is not set:
+        broadcast "<light green>%player%<white>님의 소지 금액이 <yellow>%{data.%uuid of player%.{@CODE}::money}%<yellow>원<white>입니다!"
+      else:
+        if {data.%uuid of arg-2%.{@CODE}::money} is not set:
+          send "%arg 2%님은 서버에 접속한 적이 없습니다."
+        else:
+          broadcast "<light green>%arg 2%<white>님의 소지 금액이 <yellow>%{data.%uuid of arg 2%.{@CODE}::money}%<yellow>원<white>입니다!"
     else:
       send "&7명령어를 확인해주세요 &a/money help"
       make player execute command "/money help"
