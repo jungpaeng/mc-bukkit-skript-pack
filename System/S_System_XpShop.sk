@@ -34,187 +34,266 @@ on rightclick with paper:
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>화염으로부터 보호 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>폭발으로부터 보호 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>원거리 공격으로부터 보호 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>가시 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""frost_walker"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>차가운 걸음 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""knockback"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>밀치기 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_aspect"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>발화 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""punch"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>밀어내기 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 9:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>충절 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 10:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>찌르기 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 11:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>급류 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 12:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>빠른 장전 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 13:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>관통 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 4318:
       # Level.2
       set {_enchant.sub.number} to a random integer between 1 and 17
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>보호 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>호흡 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>물갈퀴 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>날카로움 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>강타 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>살충 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>약탈 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>휘몰아치는 칼날 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 9:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>효율 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 10:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>내구성 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 11:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>행운 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 12:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>힘 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 13:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>미끼 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 14:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""channeling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>집전 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 15:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""multishot"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>다중 발사 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 16:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>가벼운 착지 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 17:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>바다의 행운 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 5886:
       # Level.3
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>화염으로부터 보호 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>폭발으로부터 보호 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>원거리 공격으로부터 보호 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""thorns"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>가시 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""loyalty"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>충절 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>찌르기 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""riptide"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>급류 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""quick_charge"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>빠른 장전 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 9:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>관통 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 7193:
       # Level.4
       set {_enchant.sub.number} to a random integer between 1 and 19
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>보호 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""respiration"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>호흡 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""depth_strider"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>물갈퀴 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>날카로움 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>강타 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>살충 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""looting"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>약탈 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sweeping"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>휘몰아치는 칼날 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 9:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>효율 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 10:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""unbreaking"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>내구성 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 11:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fortune"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>행운 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 12:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>힘 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 13:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""flame"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>화염 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 14:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""infinity"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>무한 Lv.1<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 15:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""luck_of_the_sea"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>바다의 행운 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 16:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""lure"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>미끼 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 17:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>찌르기 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 18:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""piercing"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>관통 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 19:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:2}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>가벼운 착지 Lv.2<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 8173:
       # Level.5
       set {_enchant.sub.number} to a random integer between 1 and 8
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""aqua_affinity"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>친수성<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>날카로움 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>강타 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>살충 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>효율 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""silk_touch"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>섬세한 손길<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>힘 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""impaling"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>찌르기 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 8957:
       # Level.6
       set {_enchant.sub.number} to a random integer between 1 and 3
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""fire_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>화염으로부터 보호 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""blast_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>폭발으로부터 보호 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""projectile_protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>원거리 공격으로부터 보호 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 9610:
       # Level.7
       set {_enchant.sub.number} to a random integer between 1 and 9
 
       if {_enchant.sub.number} is 1:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""protection"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>보호 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 2:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""binding_curse"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>귀속<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 3:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""vanishing_curse"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>소실<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 4:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""sharpness"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>날카로움 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 5:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""smite"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>강타 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 6:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""bane_of_arthropods"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>살충 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 7:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""efficiency"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>효율 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 8:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""power"",lvl:4}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>힘 Lv.4<white>을 획득하였습니다! <light yellow>[축]"
       else if {_enchant.sub.number} is 9:
         give player enchanted book with nbt "{StoredEnchantments:[{id:""feather_falling"",lvl:3}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+        broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>가벼운 착지 Lv.3<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 9936:
       # Level.8
       give player enchanted book with nbt "{StoredEnchantments:[{id:""mending"",lvl:1}]}" named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore}
+      broadcast "<light yellow>[경] <light green>%player%님<white>이 <light purple>수선<white>을 획득하였습니다! <light yellow>[축]"
     else if {_enchant.number} < 10001:
       # Level.9
       give 1 of {@AdminKissItem} to player
@@ -232,18 +311,25 @@ on player inventory click:
         send "{@ShopPrefix} <light red>보유중인 레벨이 부족합니다."
 
   # 기본 인챈트 북 사용 제한
-  if clicked item is enchanted book:
+  if inventory name is "Repair & Name" or "Crafting":
+    if gamemode of player is creative:
+      send "&6[Server]&8> &ccreative 모드에서 사용할 수 없는 기능입니다." to player
+      stop
+      
     set {_enchantBook.lore::*} to {@EnchantBook.Lore}
-    set {_clickedItem} to clicked item
+    if clicked item is enchanted book:
+      loop all items in the player's inventory:
+        if loop-item is enchanted book:
+          set {_eventedItem} to loop-item
+          if "%lore of loop-item%" is not "%{_enchantBook.lore::*}%":
+            send "&6[Server]&8> &c사용할 수 없는 타입의 인챈트 북을 발견하였습니다." to player
+            cancel event
+            wait 1 tick
+            remove loop-item from player
 
-    if "%lore of clicked item%" is not "%{_enchantBook.lore::*}%":
-      send "&6[Server]&8> &7사용할 수 없는 타입의 인챈트 북입니다." to player
-      cancel event
-      remove clicked item from player
-
-      if {xpShop.basicEnchant.use} is true:
-        give {_clickedItem} named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore} to player
-        send "&6[Server]&8> <light green>사용 가능한 인챈트 북을 지급하였습니다." to player
+            if {xpShop.basicEnchant.use} is true:
+              give {_eventedItem} named "{@EnchantBook.Name}" with lore {@EnchantBook.Lore} to player
+              send "&6[Server]&8> <light green>사용 가능한 인챈트 북을 지급하였습니다." to player
 
 command /xp-shop [<text>]:
   trigger:
