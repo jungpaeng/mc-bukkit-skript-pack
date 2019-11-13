@@ -65,3 +65,8 @@ on inventory click:
   if inventory name is "Repair & Name":
     if clicked item is diamond hoe or wooden hoe:
       cancel event
+
+# 농장 보호 시스템
+on entity block change:
+  if "%new changed material%" is "Dirt":
+    cancel event
