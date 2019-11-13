@@ -297,6 +297,7 @@ on rightclick with paper:
     else if {_enchant.number} < 10001:
       # Level.9
       give 1 of {@AdminKissItem} to player
+      broadcast "<light yellow>[경] 촌장님이 <light green>%player%님<white>에게 <light purple>키스<white>를 하려 달려갑니다! <light yellow>[축]"
 
 on player inventory click:
   # 상점 클릭 부분
