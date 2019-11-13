@@ -1,7 +1,208 @@
+on load:
+  send "[%script%] Successfully loaded." to console
+  # 물고기의 등급을 설정
+  set {fish.grade::*} to 1, 2, 4, 8, 16 and 32
+  set {fish.grade.char::*} to "S", "A", "B", "C", "D" and "F"
+  set {fish.grade.color::*} to "&6", "&c", "&b", "&a", "&7" and "&8"
+
+  #! fish / treaser / junk 순
+  set {fish.category::*} to 17 and 1, 3
+  set {fish.fish.item::*} to cod and salmon, tropical fish, pufferfish
+  set {fish.fish.chance::*} to 90 and 15, 5, 10
+  #! 이름표 / 안장 / 수련잎
+  set {fish.treasure.chance::*} to 1 and 1, 1
+  set {fish.treasure.item::*} to name tag and saddle, lily pad
+  #! 가죽 / 막대기 / 실
+  set {fish.junk.chance::*} to 1 and 1, 1
+  set {fish.junk.item::*} to leather and stick, string
+
+on unload:
+  delete {fish.grade::*}
+  delete {fish.grade.char::*}
+  delete {fish.grade.color::*}
+
+# Event
+on left click:
+  if tool is fishing rod:
+    if {fish.%player%::casting} is true:
+      cancel event
+      set {fish.%player%::key.player} to "%{fish.%player%::key.player}%0 "
+      runLSFfishing( player )
+on right click:
+  if tool is fishing rod:
+    if {fish.%player%::casting} is true:
+      cancel event
+      set {fish.%player%::key.player} to "%{fish.%player%::key.player}%10 "
+      runLSFfishing( player )
+
 on fishing:
+  # 미끼를 물 때 물고기 종류와 사이즈, 커맨드를 설정
   if "%state%" is "BITE":
-    send "물고기가 미끼를 물었습니다!"
+    # send "물고기가 미끼를 물었습니다!"
+
+    set {fish.%player%::casting} to true
+
+    set {fish.%player%::grade} to getLSFcategory( {fish.grade::*} )
+    set {fish.%player%::color} to {fish.grade.color::%{fish.%player%::grade}%}
+    set {fish.%player%::key.player} to ""
+
+    # 낚시 키를 구함
+    set {_key} to ""
+    set {_key::0} to "0 "
+    set {_key::1} to "10 "
+    set {_grade.num} to 8 - {fish.%player%::grade}
+    set {_loop} to {_grade.num} + random integer from 1 to 2
+    loop {_loop} times:
+      set {_key} to "%{_key}%%{_key::%random integer from 0 to 1%}%"
+    set {fish.%player%::key.fish} to {_key}
+    runTitle(player, "", getLSFcharCMD( {_key} ), 0, 40, 0)
+
+    set {_time} to 10 + {_grade.num} * 10
+    set {_flow} to {_time}
+
+    while {fish.%player%::casting} is true:
+      set {_gage} to getGage("||||||||||||||||||||||||||||||", {_flow}/{_time})
+      runActionbar(player, "%{_gage}%")
+      remove 1 from {_flow}
+      wait 1 tick
+
+      if {_flow} < 0:
+        set {fish.%player%::casting} to false
+      if {fish.%player%::casting} is false:
+        wait 1 tick
+        delete {fish.%player%::*}
+        delete fishing hook
 
   if "%state%" is "CAUGHT_FISH":
     delete caught item
-    drop cod at event-player
+    # drop cod at event-player
+
+command /test:
+  trigger:
+    loop 10 times:
+      set {_boo} to getLSFcategory( {fish.fish.chance::*} )
+      broadcast "%{_boo}%"
+
+# [Display Char] 커맨드코드를 문자로 리턴
+function getLSFcharCMD(v:texts) :: texts:
+  loop number of {_v::*} times:
+    replace "10 " with "R" in {_v::%loop-number%}
+    replace "0 " with "L" in {_v::%loop-number%}
+  return {_v::*}
+
+function getLSFcategory(chance: numbers, tool: item = air) :: number:
+  loop {_chance::*}:
+    add loop-value to {_total}
+  set {_n} to random number from 0 to {_total}
+
+  # 대 분류가 아닌 경우
+  if {_tool} is not fishing rod:
+    loop {_chance::*}:
+      add loop-value to {_k}
+      if {_n} <= {_k}:
+        return loop-index parsed as integer
+  else: # 대분류인 경우, 낚싯대의 인챈트를 확인
+    set {_per} to {_total} / 100
+    set {_level.luckOfSea} to level of luck of the sea of {_tool}
+
+    loop {_chance::*}:
+      if loop-index is "1":
+        add loop-value + {_per} * 1.5 * {_level.luckOfSea} to {_k}
+      else if loop-index is "2":
+        add loop-value + {_per} * 1 * {_level.luckOfSea} to {_k}
+      else if loop-index is "3":
+        add loop-value + {_per} * -1.5 * {_level.luckOfSea} to {_k}
+      if {_n} <= {_k}:
+        return loop-index parsed as integer
+
+# 문자열의 비율값만큼 색을 칠합니다.
+function getGage(g: text, p: number) :: text:
+  set {_l} to length of {_g}
+  set {_a} to round down ( {_p} * {_l} )
+  set {_g::1} to "&c%first {_a} character of {_g}%"
+  set {_g::2} to "&f%last {_l} - {_a} character of {_g}%"
+
+  loop {_g::*}:
+    if uncolored loop-value is "none":
+      set {_g::%loop-index%} to ""
+  return "%{_g::1}%%{_g::2}%"
+
+# 낚시 미니게임 메인 함수
+function runLSFfishing(p: player):
+  set {_cmd::*} to getLSFcharCMD( {fish.%{_p}%::key.fish} and {fish.%{_p}%::key.player} )
+
+  # 내구도가 음수로 빠진경우 0으로
+  if durability of tool of {_p} < 0:
+    set durability of tool of {_p} to 0
+  set {_dura} to durability of tool of {_p}
+  
+  if {fish.%{_p}%::key.fish} is {fish.%{_p}%::key.player}:
+    set {_item} to getLSFcastItem( {_p} )
+    drop {_item} at location of {_p} without velocity
+
+    runTitle( {_p}, "", "%{fish.%{_p}%::color}%%{_cmd::2}%", 0, 40, 20 )
+    runActionbar( {_p}, "성공적으로 낚았습니다!" )
+
+    # 내구성 인챈트에 따라 내구도 감소
+    chance of 1 / (level of unbreaking of tool of {_p} + 1):
+      add 1 to {_dura}
+    # 수선이 있는 경우
+    if level of mending of tool of {_p} > 0:
+      if {fish.%{_p}%::grade} = 5:  # D 등급
+        chance of 0.5:
+          remove 1 from {_dura}
+      else if {fish.%{_p}%::grade} < 5:
+        remove 6 - {fish.%{_p}%::grade} from {_dura}
+    if {_dura} < 0:
+      set {_dura} to 0
+    set durability of tool of {_p} to {_dura}
+    set {fish.%{_p}%::casting} to false
+  else if first length of {fish.%{_p}%::key.player} character of {fish.%{_p}%::key.fish} is not {fish.%{_p}%::key.player}:
+    runActionbar( {_p}, "컨트롤이 형편없어서 물고기가 도망갔습니다." )
+    if {fish.%{_p}%::grade} < 4: # 1 ~ 6 등급 모두 노출
+      broadcast "&6[Server]&8> <light green>%{_p}%님<white>이 %{_grade}% <white>등급 물고기를 놓쳤습니다.."
+    set durability of tool of {_p} to {_dura} #! 내구도 유지
+    set {fish.%{_p}%::casting} to false
+  else if length of {fish.%{_p}%::key.fish} < length of {fish.%{_p}%::key.player}:
+    runActionbar( {_p}, "당신의 컨트롤이 너무 빨라 읽을 수 없었습니다!" )
+    set durability of tool of {_p} to {_dura} #! 내구도 유지
+    set {fish.%{_p}%::casting} to false
+  else:
+    set {_cmd} to "%{fish.%{_p}%::color}%%{_cmd::2}%&r%last ( length of {_cmd::1} - length of {_cmd::2} ) character of {_cmd::1}%"
+    runTitle( {_p}, "", {_cmd}, 0, 40, 0 )
+    set durability of tool of {_p} to {_dura} #! 내구도 유지
+
+# 낚싯대 인챈트 적용하여 아이템을 분류
+function getLSFcastItem(p: player) :: item:
+  set {_category} to getLSFcategory( {fish.category::*}, tool of {_p} )
+
+  if {_category} is 1:      # 생성
+    set {_chance} to getLSFcategory( {fish.fish.chance::*} )
+    set {_grade.char} to {fish.grade.char::%{fish.%{_p}%::grade}%}
+    set {_grade} to "%{fish.grade.color::%{fish.%{_p}%::grade}%}%%{_grade.char}%&r"
+
+    if {_grade.char} is "F":
+      set {_length} to random number from 15 to 30
+    else if {_grade.char} is "D":
+      set {_length} to random number from 20 to 50
+    else if {_grade.char} is "C":
+      set {_length} to random number from 40 to 60
+    else if {_grade.char} is "B":
+      set {_length} to random number from 50 to 80
+    else if {_grade.char} is "A":
+      set {_length} to random number from 70 to 100
+    else if {_grade.char} is "S":
+      set {_length} to random number from 90 to 120
+
+    set {_item} to {fish.fish.item::%{_chance}%} with lore "&7등급: %{_grade}% &7등급" and "&7길이: %{_length}% &7cm"
+
+    if {fish.%{_p}%::grade} < 7: # 1 ~ 6 등급 모두 노출
+      broadcast "&6[Server]&8> <light green>%{_p}%님<white>이 %{_grade}% <white>등급 물고기를 낚았습니다!"
+  else if {_category} is 2: # 보물
+    set {_chance} to getLSFcategory( {fish.treasure.chance::*} )
+    set {_item} to {fish.treasure.item::%{_chance}%}
+  else if {_category} is 3: # 쓰레기
+    set {_chance} to getLSFcategory( {fish.junk.chance::*} )
+    set {_item} to {fish.junk.item::%{_chance}%}
+  
+  return {_item}
