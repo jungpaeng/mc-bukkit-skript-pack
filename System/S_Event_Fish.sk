@@ -77,12 +77,6 @@ on fishing:
     delete caught item
     # drop cod at event-player
 
-command /test:
-  trigger:
-    loop 10 times:
-      set {_boo} to getLSFcategory( {fish.fish.chance::*} )
-      broadcast "%{_boo}%"
-
 # [Display Char] 커맨드코드를 문자로 리턴
 function getLSFcharCMD(v:texts) :: texts:
   loop number of {_v::*} times:
@@ -196,7 +190,7 @@ function getLSFcastItem(p: player) :: item:
 
     set {_item} to {fish.fish.item::%{_chance}%} with lore "&7등급: %{_grade}% &7등급" and "&7길이: %{_length}% &7cm"
 
-    if {fish.%{_p}%::grade} < 7: # 1 ~ 6 등급 모두 노출
+    if {fish.%{_p}%::grade} < 3: # 노출 등급 결정
       broadcast "&6[Server]&8> <light green>%{_p}%님<white>이 %{_grade}% <white>등급 물고기를 낚았습니다!"
   else if {_category} is 2: # 보물
     set {_chance} to getLSFcategory( {fish.treasure.chance::*} )
