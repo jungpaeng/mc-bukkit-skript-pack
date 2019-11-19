@@ -1,0 +1,234 @@
+options:
+  PREFIX: &7[&6거래&7]&f
+  GUI.NAME: "     &5&nYours&r              &4&nTheirs"
+  #state 0 - GUI를 열었을 때 상태
+  GUI.STATE.0: orange stained glass pane named "&5클릭하여 교환 준비"
+  GUI.OTHERSTATE.0: orange stained glass pane named "&6상대 겁니다"
+  #state 1 - 거래 준비 상태
+  GUI.STATE.1: yellow stained glass pane named "&6다시 클릭하여 거래를 해주세요"
+  GUI.OTHERSTATE.1: yellow stained glass pane named "&6준비를 기다리는 중"
+  #state 2 - 준비 완료
+  GUI.STATE.2: green stained glass pane named "&a상대방의 준비를 기다리는 중"
+  GUI.CANCEL: red stained glass pane named "&c클릭하여 거래 취소"
+
+  TIMEOUT: 2 minutes
+  TRADE.CREATIVE: true
+  TRADE.RANGE: true
+  RANGE: 100
+
+on load:
+  wait a tick
+  set {trading::slots::*} to 0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30, 36, 37, 38 and 39
+
+on unload:
+  loop all players:
+    if {trading::player::%loop-player%::trading} is set:
+      loop {trading::slots::*}:
+        if slot loop-value-2 of loop-player's current inventory is not air:
+          add slot loop-value-2 of loop-player's current inventory to loop-player's inventory
+          set slot loop-value-2 of loop-player's current inventory to air
+      close loop-player's inventory
+  delete {trading::*}
+
+on inventory click:
+  if inventory name is {@GUI.NAME}:
+    cancel event
+    # 거래 상대를 _user에 저장
+    set {_user} to {trading::player::%player%::trading}
+
+    if clicked inventory is not the player's inventory:
+      # 거래 창의 메뉴를 클릭하는 경우
+      if clicked slot is between 45 and 48:
+        play sound "UI_BUTTON_CLICK" with volume 1 with pitch 1 at player's location for player
+        if clicked slot is 48:  # 거래 취소
+          close player's inventory
+        else:   # 거래 관련 버튼 클릭
+          if {trading::player::%player%::state} is 0:
+            set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.2}
+            set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.1}
+            set {trading::player::%player%::state} to 1
+            if {trading::player::%player%::state} and {trading::player::%{_user}%::state} are 1:
+              set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.1}
+              set slots integers between 50 and 53 of {trading::player::%player%::inventory} to {@GUI.OTHERSTATE.0}
+              set slots integers between 45 and 47 of {trading::player::%{_user}%::inventory} to {@GUI.STATE.1}
+              set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.0}
+              set {trading::player::%{_user}%::state} and {trading::player::%player%::state} to 2
+          else if {trading::player::%player%::state} is 2:
+            set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.2}
+            set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.1}
+            set {trading::player::%player%::state} to 3
+            if {trading::player::%player%::state} and {trading::player::%{_user}%::state} are 3:
+              # 아이템 전달
+              loop {trading::slots::*}:
+                if slot loop-value of {trading::player::%player%::inventory} is not air:
+                  add slot loop-value of {trading::player::%player%::inventory} to {_user}'s inventory
+                  set slot loop-value of {trading::player::%player%::inventory} to air
+                if slot loop-value of {trading::player::%{_user}%::inventory} is not air:
+                  add slot loop-value of {trading::player::%{_user}%::inventory} to player's inventory
+                  set slot loop-value of {trading::player::%{_user}%::inventory} to air
+              delete {trading::player::%player%::*}
+              delete {trading::player::%{_user}%::*}
+              message "{@PREFIX} 거래가 완료되었습니다!" to player and {_user}
+              play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at player's location for player
+              play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at {_user}'s location for {_user}
+              close inventory of player and {_user}
+      else:
+        # 아이템 복구
+        loop {trading::slots::*}:
+          if loop-value is clicked slot:
+            if slot loop-value of current inventory is not air:
+              # 준비 중에 아이템을 올렸다면 거래 상태로 변경
+              add slot loop-value of current inventory to player's inventory
+              set slot loop-value of current inventory to air
+              set slot loop-value + 5 of {trading::player::%{_user}%::inventory} to air
+              play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 4 at player's location for player
+              # 준비 중에 아이템을 제거했다면 거래 상태로 변경
+              if {trading::player::%player%::state} is not 0:
+                set {trading::player::%{_user}%::state} and {trading::player::%player%::state} to 0
+                set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.0}
+                set slots integers between 50 and 53 of {trading::player::%player%::inventory} to {@GUI.OTHERSTATE.0}
+                set slots integers between 45 and 47 of {trading::player::%{_user}%::inventory} to {@GUI.STATE.0}
+                set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.0}
+              stop
+    else:
+      # 아이템 올리기
+      if slot clicked slot of clicked inventory is not air:
+        loop {trading::slots::*}:
+          if slot loop-value of current inventory is air:
+            set slot loop-value of {trading::player::%player%::inventory} to clicked item
+            set slot loop-value + 5 of {trading::player::%{_user}%::inventory} to clicked item
+            play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 1 with pitch 4 at player's location for player
+            set slot clicked slot of clicked inventory to air
+            # 준비 중에 아이템을 올렸다면 거래 상태로 변경
+            if {trading::player::%player%::state} is not 0:
+              set {trading::player::%{_user}%::state} and {trading::player::%player%::state} to 0
+              set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.0}
+              set slots integers between 50 and 53 of {trading::player::%player%::inventory} to {@GUI.OTHERSTATE.0}
+              set slots integers between 45 and 47 of {trading::player::%{_user}%::inventory} to {@GUI.STATE.0}
+              set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.0}
+            stop
+        message "{@PREFIX} 최대 20개의 아이템을 올릴 수 있습니다."
+
+on inventory close:
+  if {trading::player::%player%::state} is set:
+    if {trading::player::%player%::state} < 4:
+      # 거래 취소
+      set {_user} to {trading::player::%player%::trading}
+      if {trading::player::%player%::trading} is set:
+        loop {trading::slots::*}:
+          if slot loop-value of event-inventory is not air:
+            add slot loop-value of event-inventory to player's inventory
+            set slot loop-value of event-inventory to air
+          if slot loop-value of {trading::player::%{_user}%::inventory} is not air:
+            add slot loop-value of {trading::player::%{_user}%::inventory} to {_user}'s inventory
+            set slot loop-value of {trading::player::%{_user}%::inventory} to air
+      wait 1 tick
+      delete {trading::player::%player%::*}
+      message "{@PREFIX} 거래를 취소되었습니다."
+      wait 1 tick
+      close inventory of {_user}
+      delete {trading::player::%{_user}%::*}
+
+command /trade [<text>] [<player>]:
+  trigger:
+    if sender is not player:
+      send "{@PREFIX} 플레이어 전용 명령어입니다."
+      stop
+    if arg 1 is not set:
+      make player execute command "/trade help"
+    else if arg 1 is "help":
+      send "&8&m=====[&r &cTrade &7&oCoded by Jungpaeng &8&m]====="
+      send "&a( ) = 필수 값 &7| &a[ ] = 옵션 값"
+      send "&a/trade request (player) &7player에게 거래 신청을 합니다."
+    if arg 1 is "request":
+      if arg 2 is not set:
+        make player execute command "/trade help"
+        stop
+      if arg 2 is not online:
+        message "{@PREFIX} &c플레이어를 찾을 수 없습니다."
+      else:
+        # 이미 거래 진행 중이라면 취소
+        if {trading::player::%player%::request} or {trading::player::%player%::trading} is set:
+          message "{@PREFIX} 이미 거래가 진행 중입니다. &l/trade cancel&r을 입력해 거래를 취소하세요."
+          stop
+        # 본인에게 거래 신청을 하는 경우
+        if arg 2 is player:
+          message "{@PREFIX} 본인에게 거래를 신청할 수 없습니다."
+          stop
+        # creative 모드에서 거래 신청
+        if gamemode of player is creative:
+          if {@TRADE.CREATIVE} is false:
+            message "{@PREFIX} creative 모드에서 거래를 할 수 없습니다."
+            stop
+        if distance between player and arg 2 > {@RANGE}:
+          if {@TRADE.RANGE} is true:
+            message "{@PREFIX} 100 블록 이상 차이나는 유저와 거래를 할 수 없습니다."
+            stop
+        runTitle( arg 2, "", "거래 요청이 있습니다!", 0, 40, 20 )
+        play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at player's location for player
+        play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at arg 2's location for arg 2
+        message "{@PREFIX} &a&l%player% &6가 거래 신청하였습니다." to arg 2
+        message "{@PREFIX} &a&l/trade accept &6으로 수락 또는 &c&l/trade deny &6으로 거절" to arg 2
+        message "{@PREFIX} &a%arg 2%에게 거래 신청하였습니다."
+        set {trading::player::%player%::request} to arg 2
+        while {trading::player::%player%::request} is set:
+          wait a second
+          add a second to {_tracker}
+          if {_tracker} >= {@TIMEOUT}:
+            if {trading::player::%player%::request} is set:
+              delete {trading::player::%player%::request}
+              message "{@PREFIX} &c%arg 2%가 부재중이어서 거래 신청이 취소되었습니다."
+    else if arg 1 is "accept":
+      loop all players:
+        if {trading::player::%loop-player%::request} is player:
+          delete {trading::player::%loop-player%::request}
+          set {_user} to loop-player
+          exit loop
+      if {_user} is not set:
+        message "{@PREFIX} 거래 상태가 아닙니다."
+        stop
+      # 거래에 필요한 변수 세팅
+      set {trading::player::%{_user}%::state} and {trading::player::%player%::state} to 0
+      set {trading::player::%{_user}%::trading} to player
+      set {trading::player::%player%::trading} to {_user}
+      # 거래 인벤토리 GUI 설정
+      set {trading::player::%{_user}%::inventory} to chest inventory with 6 rows named {@GUI.NAME}
+      set {trading::player::%player%::inventory} to chest inventory with 6 rows named {@GUI.NAME}
+      set slots integers between 45 and 47 of {trading::player::%{_user}%::inventory} to {@GUI.STATE.0}
+      set slots integers between 45 and 47 of {trading::player::%player%::inventory} to {@GUI.STATE.0}
+      set slots integers between 50 and 53 of {trading::player::%{_user}%::inventory} to {@GUI.OTHERSTATE.0}
+      set slots integers between 50 and 53 of {trading::player::%player%::inventory} to {@GUI.OTHERSTATE.0}
+      set slot 48 of {trading::player::%player%::inventory} to {@GUI.CANCEL}
+      set slot 48 of {trading::player::%{_user}%::inventory} to {@GUI.CANCEL}
+
+      open {trading::player::%player%::inventory} to player
+      open {trading::player::%{_user}%::inventory} to {_user}
+    else if arg 1 is "deny":
+      loop all players:
+        if {trading::player::%loop-player%::request} is player:
+          delete {trading::player::%loop-player%::request}
+          message "{@PREFIX} 거절당하였습니다. 거래 신청이 취소됩니다." to loop-player
+          set {_found} to true
+          exit loop
+      if {_found} are not set:
+        message "{@PREFIX} 거래 상태가 아닙니다."
+      else:
+        message "{@PREFIX} 거래 신청을 거절하였습니다."
+    else if arg 1 is "cancel":
+      if {trading::player::%player%::trading} is set:
+        close player's inventory
+      else if {trading::player::%player%::request} is not set:
+        message "{@PREFIX} 거래 상태가 아닙니다."
+        stop
+      delete {trading::player::%player%::request}
+      message "{@PREFIX} 취소되었습니다."
+
+command /trade-request [<player>]:
+  trigger:
+    make player execute command "/trade request %arg%"
+command /trade-accept:
+  trigger:
+    make player execute command "/trade accept"
+command /trade-deny:
+  trigger:
+    make player execute command "/trade deny"
