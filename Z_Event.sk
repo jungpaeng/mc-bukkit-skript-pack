@@ -62,7 +62,7 @@ On death of spotty:
 
 # 아이템 이름 변경 금지
 on inventory click:
-  if inventory name is "Repair & Name":
+  if inventory name is "Repair & Name" or "Repair & Disenchant":
     if clicked item is diamond hoe or wooden hoe:
       cancel event
 
@@ -70,3 +70,28 @@ on inventory click:
 on entity block change:
   if "%new changed material%" is "Dirt":
     cancel event
+
+on block break of nether quartz ore:
+  clear drops
+
+  wait 1 tick
+  drop nether quartz at event-block
+  set {_exp} to random integer from 1 to 3
+  if {_exp} is 1:
+    spawn 1 xp at event-block
+  else if {_exp} is 2:
+    spawn 2 xp at event-block
+  else if {_exp} is 3:
+    spawn 3 xp at event-block
+
+on portal:
+  if event-world is "world":
+    cancel event
+    send "&6[Server]&8> &cworld에서 포탈을 사용할 수 없습니다." to player
+
+on player world change:
+  wait 1 tick
+  if world is "Free-World":
+    apply potion of speed of tier 10 to player for 3600 seconds
+  else:
+    remove speed from player
