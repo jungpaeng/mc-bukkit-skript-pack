@@ -6,8 +6,8 @@ options:
   # 인챈트 뽑기 북 아이템 코드 저장
   EnchantRandomBox.NeedLevel: 30
   EnchantRandomBox.Name: <green>[Enchant Gacha Book]
-  EnchantRandomBox.UsedItem: glowing paper named "<green>[Enchant Gacha Book]" with lore "" and "<light red>[우클릭] 인챈트 북을 랜덤으로 획득합니다."
-  EnchantRandomBox: glowing paper named "<green>[Enchant Gacha Book]" with lore "<white>인챈트 북을 랜덤으로 획득합니다." and "", "<light red>[구매 가격] <light green>Level 30", "<light red><bold>해당 아이템은 판매할 수 없습니다."
+  EnchantRandomBox.UsedItem: glowing paper with custom model data 1 named "<green>[Enchant Gacha Book]" with lore "" and "<light red>[우클릭] 인챈트 북을 랜덤으로 획득합니다."
+  EnchantRandomBox: glowing paper with custom model data 1 named "<green>[Enchant Gacha Book]" with lore "<white>인챈트 북을 랜덤으로 획득합니다." and "", "<light red>[구매 가격] <light green>Level 30", "<light red><bold>해당 아이템은 판매할 수 없습니다."
 
   EnchantBook.Name: <yellow>[Enchanted Book]
   EnchantBook.Lore: "" and "<light red>> <white>인챈트북을 <light red>[모루]<white>에서 사용할 수 있습니다."
