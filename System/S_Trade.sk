@@ -164,7 +164,7 @@ command /trade [<text>] [<player>]:
           if {@TRADE.RANGE} is true:
             message "{@PREFIX} 100 블록 이상 차이나는 유저와 거래를 할 수 없습니다."
             stop
-        runTitle( arg 2, "", "거래 요청이 있습니다!", 0, 40, 20 )
+        runTitle( arg 2, "", "[거래 요청] 채팅창에서 확인해주세요.", 0, 40, 20 )
         play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at player's location for player
         play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at arg 2's location for arg 2
         message "{@PREFIX} &a&l%player% &6가 거래 신청하였습니다." to arg 2
