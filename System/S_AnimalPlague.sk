@@ -1,0 +1,67 @@
+on load: #! 콘솔에 로드 띄우기
+  send "[%script%] Successfully loaded." to console
+
+on load:
+  wait 200 tick
+
+  loop all entities:
+    if glowing of loop-entity is true:
+      kill loop-entity
+
+  delete {animalroutine}
+  runAnimalRoutine()
+
+command /animalPlague [<text>]: 
+  trigger:
+    if player is op:
+      if arg-1 is not set:
+        message "인자를 입력해주세요."
+      if arg-1 is "state":
+        if {animalroutine} is true:
+          send "동물 전염병이 활성화되어 있습니다." to player
+        else:
+          send "동물들은 안전합니다!" to player
+      if arg-1 is "start":
+        delete {animalroutine}
+        runAnimalRoutine()
+      if arg-1 is "stop":
+        set {animalroutine} to false
+
+function runPlague(e:entity):
+  if "%type of {_e}%" is "cow" or "pig", "chicken", "sheep":
+    wait 10 tick
+    if glowing of {_e} is false:
+      set glowing of {_e} to true
+    while {_e} is alive:
+      wait 10 tick
+      if {_e} is alive:
+        loop all entities in radius 1 around {_e}: #! 변수로는 damage가 동작하지 않음
+          if loop-entity is {_e}:
+            damage loop-entity by 0.5
+          else if type of loop-entity is type of {_e}:
+            runPlague( loop-entity )
+
+function runAnimalRoutine(bool:boolean = true):
+  if {animalroutine} is not set:
+    set {animalroutine} to true
+
+    loop all entities:
+      if "%type of loop-entity-1%" is "cow" or "pig", "chicken", "sheep":
+        set {_cnt} to 0
+        loop all entities in radius 2 around loop-entity-1:
+          if "%type of loop-entity-2%" is "%type of loop-entity-1%":
+            add 1 to {_cnt}
+          if glowing of loop-entity-2 is true:
+            set {_plague} to false
+        if {_plague} is not false:
+          if {_cnt} > 5:
+            runPlague(loop-entity-1)
+
+        wait 10 tick
+        if {animalroutine} is false:
+          send "[%script%] 루틴 시작" to console
+          stop
+    send "[%script%] 루틴 종료" to console
+    wait 3 minute
+    delete {animalroutine}
+    runAnimalRoutine()
