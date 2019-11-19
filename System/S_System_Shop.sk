@@ -71,13 +71,13 @@ on player inventory click:
 
 # 서브 상점 메뉴일 때 이벤트
 on player inventory click:
-  if inventory name of current inventory contains "{@ShopItemPrefix}":
+  if inventory name contains "{@ShopItemPrefix}":
     cancel event
     
     loop {S.Menu::%{S.Menu.%uuid of player%.Select}%.Items::*}:
       set {_clickedItem.Parsed::*} to {S.Menu::%{S.Menu.%uuid of player%.Select}%.Items::%loop-index%.Parse::*}
 
-      if {_clickedItem.Parsed::1} is "%click slot%":
+      if {_clickedItem.Parsed::1} is "%clicked raw slot%":
         # 구매/판매할 아이템을 미리 정의
         set {_controlBlock} to {_clickedItem.Parsed::2} parsed as itemtype with nbt {_clickedItem.Parsed::3}
 
