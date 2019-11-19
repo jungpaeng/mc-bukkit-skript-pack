@@ -46,3 +46,13 @@ function getTotalExperience(xp: number) :: number:
   else:
     set {_totalExperience} to 4.5 * {_xp} * {_xp} - 162.5 * {_xp} + 2220
   return {_totalExperience}
+
+# 타이틀
+function runTitle(p: player, t: text, s: text, 1: integer = 10, 2: integer = 20, 3: integer = 10):
+	make console execute command "/title %{_p}% times %{_1}% %{_2}% %{_3}%"
+	make console execute command "/title %{_p}% title {""text"":""%{_t}%""}"
+	make console execute command "/title %{_p}% subtitle {""text"":""%{_s}%""}"
+
+# 액션바
+function runActionbar(p:player,t:text):
+	make console execute command "/title %{_p}% actionbar {""text"":""%{_t}%""}"
