@@ -82,3 +82,13 @@ every minute:
       set {playerInfo.join::%uuid of loop-player%} to now
       set {data.%uuid of loop-player%.{@CODE}::lastLogin} to {playerInfo.join::%uuid of loop-player%} formatted with "YYMMdd-HHmmss"
       delete {data.%uuid of loop-player%.{@CODE}::playTime.daily}
+
+command /player-info [<offlineplayer>]:
+  trigger:
+    send "<white>[<light blue>%arg-1%<light green>님의 기본 정보<white>]" to player
+
+    send "최초 로그인 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::firstLogin}%"
+    send "최근 로그인 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::lastLogin}%"
+
+    send "오늘 플레이한 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::playTime.daily}%"
+    send "총 플레이한 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::playTime.total}%"
