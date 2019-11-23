@@ -14,7 +14,7 @@ options:
   TIMEOUT: 2 minutes
   TRADE.CREATIVE: true
   TRADE.RANGE: true
-  RANGE: 100
+  RANGE: 200
 
 on load:
   wait a tick
@@ -162,7 +162,7 @@ command /trade [<text>] [<player>]:
             stop
         if distance between player and arg 2 > {@RANGE}:
           if {@TRADE.RANGE} is true:
-            message "{@PREFIX} 100 블록 이상 차이나는 유저와 거래를 할 수 없습니다."
+            message "{@PREFIX} 너무 멀어 플레이어를 찾을 수 없습니다."
             stop
         runTitle( arg 2, "", "[거래 요청] 채팅창에서 확인해주세요.", 0, 40, 20 )
         play sound "ENTITY_PLAYER_LEVELUP" with volume 1 with pitch 1 at player's location for player
