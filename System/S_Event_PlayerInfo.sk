@@ -85,3 +85,5 @@ command /player-info [<offlineplayer>]:
 
       send "오늘 플레이한 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::playTime.daily}%"
       send "총 플레이한 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::playTime.total}%"
+
+      send "출석 일수 : <light green>%{data.%uuid of arg-1%.playerdata::dailyitems.today}%"
