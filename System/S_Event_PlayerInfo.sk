@@ -60,7 +60,7 @@ function renewPlayerPlayTime(pu: text):
   
   set {playerInfo.join::%{_pu}%} to now
 
-# 매 분마다, 현재 시간을 체크합니다.
+# 11시 59분, 12시에 플레이어 접속 시간을 초기화합니다.
 every minute:
   if now formatted with "HH:mm" is "23:54":
     broadcast "&6[Server]&8> &75분 뒤, 플레이어 접속 시간을 초기화합니다..."
@@ -70,14 +70,19 @@ every minute:
   if now formatted with "HH:mm" is "23:59" or "00:00":
     broadcast "&6[Server]&8> &7플레이어 접속 시간을 초기화합니다..."
     loop {info.uuid::*}:
-      set {playerInfo.join::%loop-value%} to now
-      set {data.%loop-value%.{@CODE}::lastLogin} to {playerInfo.join::%loop-value%} formatted with "YYMMdd-HHmmss"
+      wait 1 tick
       delete {data.%loop-value%.{@CODE}::playTime.daily}
+
+      if loop-value is online:
+        wait 1 tick
+        set {playerInfo.join::%loop-value%} to now
+        set {data.%loop-value%.{@CODE}::lastLogin} to {playerInfo.join::%loop-value%} formatted with "YYMMdd-HHmmss"
 
 command /player-info [<offlineplayer>]:
   trigger:
     if player is op:
-      renewPlayerPlayTime(uuid of arg-1)
+      if arg-1 is online:
+        renewPlayerPlayTime(uuid of arg-1)
       send "<white>[<light blue>%arg-1%<light green>님의 기본 정보<white>]" to player
 
       send "최초 로그인 시간 : <light green>%{data.%uuid of arg-1%.{@CODE}::firstLogin}%"
