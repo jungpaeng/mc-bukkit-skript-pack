@@ -73,7 +73,7 @@ every minute:
       wait 1 tick
       delete {data.%loop-value%.{@CODE}::playTime.daily}
 
-      if loop-value is online:
+      if {info.name::%loop-value%} parsed as player is online:
         wait 1 tick
         set {playerInfo.join::%loop-value%} to now
         set {data.%loop-value%.{@CODE}::lastLogin} to {playerInfo.join::%loop-value%} formatted with "YYMMdd-HHmmss"
