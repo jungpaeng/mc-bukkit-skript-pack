@@ -1,0 +1,81 @@
+options:
+  TIME_TICK: 90
+  WAIT_TICK: 2
+  ABLE_WORLD: "world"
+  ABLE_RANGE: 1000
+  TELEPORT_POS: -39.5, 82, -12.5
+
+command /test-returning:
+  trigger:
+    give glowing book with custom model data 1 named "<green>[마을 귀환서]" with lore "" and "<light red>[우클릭] 분수대 위로 귀환합니다.", "", "&r<bold>* 오버 월드에서 사용 가능한 마을 귀환서입니다.", "", "&r사용 시 10초 뒤 분수대로 귀환합니다.", "&r대기 시간동안 움직이면 귀환이 취소됩니다.", "&r사용 가능한 좌표가 -{@ABLE_RANGE} ~ {@ABLE_RANGE}로 제한되어 있습니다." to player
+
+on right click with book:
+  # CustomModalData가 1이면 귀환서로 취급
+  if "CustomModelData" tag of nbt of player's tool is "1":
+
+    # 허용된 월드 외에는 귀환서를 사용할 수 없음
+    if player's world is not {@ABLE_WORLD}:
+      send "&6[Server]&8> &c귀환서를 사용할 수 없는 장소입니다."
+      stop
+
+    send title "&c&l움직이면 귀환이 취소됩니다." to player
+    set {_plaerPrevPos} to player's location
+    set {_plaerPrevPos::*} to x-coord of {_plaerPrevPos}, y-coord of {_plaerPrevPos} and z-coord of {_plaerPrevPos}
+    
+    # 지정된 범위 밖에서는 귀환서를 사용할 수 없음
+    if {_plaerPrevPos::1} > {@ABLE_RANGE}:
+      send "&6[Server]&8> &c귀환서를 사용할 수 범위를 벗어났습니다."
+      send "&6사용 가능 범위 : X: -1000 to 1000 || Z: -1000 to 1000"
+      stop
+    if {_plaerPrevPos::1} < -{@ABLE_RANGE}:
+      send "&6[Server]&8> &c귀환서를 사용할 수 범위를 벗어났습니다."
+      send "&6사용 가능 범위 : X: -1000 to 1000 || Z: -1000 to 1000"
+      stop
+    if {_plaerPrevPos::3} > {@ABLE_RANGE}:
+      send "&6[Server]&8> &c귀환서를 사용할 수 범위를 벗어났습니다."
+      send "&6사용 가능 범위 : X: -1000 to 1000 || Z: -1000 to 1000"
+      stop
+    if {_plaerPrevPos::3} < -{@ABLE_RANGE}:
+      send "&6[Server]&8> &c귀환서를 사용할 수 범위를 벗어났습니다."
+      send "&6사용 가능 범위 : X: -1000 to 1000 || Z: -1000 to 1000"
+      stop
+
+    # 틱으로 8 초를 계산 후 게이지 바로 표시
+    set {_time} to {@TIME_TICK}
+    set {_flow} to {_time}
+    set {returning.%player%::casting} to true
+
+    while {returning.%player%::casting} is true:
+      set {_gage} to getGage("||||||||||||||||||||||||||||||", {_flow}/{_time})
+      runActionbar(player, "%{_gage}%")
+      remove 1 from {_flow}
+      wait {@WAIT_TICK} tick
+
+      if {_flow} < 0:
+        set {returning.%player%::casting} to false
+      if {returning.%player%::casting} is false:
+        wait 1 tick
+        delete {returning.%player%::*}
+
+    set {_plaerNextPos} to player's location
+    set {_plaerNextPos::*} to x-coord of {_plaerNextPos}, y-coord of {_plaerNextPos} and z-coord of {_plaerNextPos}
+
+    send action bar from "" to player
+    send title "" to player
+    
+    loop {_plaerPrevPos::*}:
+      if loop-value is not {_plaerNextPos::%loop-index%}:
+        send action bar from "&c&l캐스팅 중 움직임이 발견되어 귀환을 취소합니다." to player
+        stop
+
+    # 귀환 기능 작성
+    drawWarpRings style 1, particle "redstone", RGB 247, 172, 188, center location of player, id "%player%-returning-1", rainbowMode false, scan false, height 1.5, radius 0.8, ringCount 3, ringDensity 8, visibleRange 10, pulseDelay 2
+    drawWarpRings style 1, particle "redstone", RGB 218, 112, 214, center location of player, id "%player%-returning-2", rainbowMode false, scan false, height 1.5, radius 0.8, ringCount 3, ringDensity 4, visibleRange 10, pulseDelay 2
+    drawWarpRings style 1, particle "redstone", RGB 135, 206, 250, center location of player, id "%player%-returning-3", rainbowMode false, scan false, height 1.0, radius 0.8, ringCount 2, ringDensity 6, visibleRange 10, pulseDelay 2
+    wait 2 second
+    stopEffect "%player%-returning-1"
+    stopEffect "%player%-returning-2"
+    stopEffect "%player%-returning-3"
+
+    teleport player to location at ({@TELEPORT_POS})
+    
