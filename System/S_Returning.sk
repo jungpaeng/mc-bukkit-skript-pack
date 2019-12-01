@@ -7,7 +7,8 @@ options:
 
 command /test-returning:
   trigger:
-    give glowing book with custom model data 1 named "<green>[마을 귀환서]" with lore "" and "<light red>[우클릭] 분수대 위로 귀환합니다.", "", "&r<bold>* 오버 월드에서 사용 가능한 마을 귀환서입니다.", "", "&r사용 시 10초 뒤 분수대로 귀환합니다.", "&r대기 시간동안 움직이면 귀환이 취소됩니다.", "&r사용 가능한 좌표가 -{@ABLE_RANGE} ~ {@ABLE_RANGE}로 제한되어 있습니다." to player
+    if player is op:
+      give glowing book with custom model data 1 named "<green>[마을 귀환서]" with lore "" and "<light red>[우클릭] 분수대 위로 귀환합니다.", "", "&r<bold>* 오버 월드에서 사용 가능한 마을 귀환서입니다.", "", "&r사용 시 10초 뒤 분수대로 귀환합니다.", "&r대기 시간동안 움직이면 귀환이 취소됩니다.", "&r사용 가능한 좌표가 -{@ABLE_RANGE} ~ {@ABLE_RANGE}로 제한되어 있습니다." to player
 
 on right click with book:
   # CustomModalData가 1이면 귀환서로 취급
