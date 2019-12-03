@@ -69,14 +69,15 @@ every minute:
 
   if now formatted with "HH:mm" is "23:59" or "00:00":
     broadcast "&6[Server]&8> &7플레이어 접속 시간을 초기화합니다..."
-    loop {info.uuid::*}:
-      wait 1 tick
-      delete {data.%loop-value%.{@CODE}::playTime.daily}
-
-      if {info.name::%loop-value%} parsed as player is online:
+    loop {info.user::*}:
+      if {info.name::%loop-index%} parsed as player is online:
         wait 1 tick
-        set {playerInfo.join::%loop-value%} to now
-        set {data.%loop-value%.{@CODE}::lastLogin} to {playerInfo.join::%loop-value%} formatted with "YYMMdd-HHmmss"
+        set {playerInfo.join::%loop-index%} to now
+        set {data.%loop-index%.{@CODE}::lastLogin} to {playerInfo.join::%loop-index%} formatted with "YYMMdd-HHmmss"
+
+      wait 1 tick
+      delete {data.%loop-index%.{@CODE}::playTime.daily}
+
 
 command /player-info [<offlineplayer>]:
   trigger:
