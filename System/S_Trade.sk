@@ -21,13 +21,13 @@ on load:
   set {trading::slots::*} to 0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21, 27, 28, 29, 30, 36, 37, 38 and 39
 
 on unload:
-  loop all players:
-    if {trading::player::%loop-player%::trading} is set:
+  loop {info.name::*}:
+    if {trading::player::%loop-value%::trading} is set:
       loop {trading::slots::*}:
-        if slot loop-value-2 of loop-player's current inventory is not air:
-          add slot loop-value-2 of loop-player's current inventory to loop-player's inventory
-          set slot loop-value-2 of loop-player's current inventory to air
-      close loop-player's inventory
+        if slot loop-value-2 of loop-value-1 parsed as player's current inventory is not air:
+          add slot loop-value-2 of loop-value-1 parsed as player's current inventory to loop-value-1 parsed as player's inventory
+          set slot loop-value-2 of loop-value-1 parsed as player's current inventory to air
+      close loop-value-1 parsed as player's inventory
   delete {trading::*}
 
 on inventory click:
