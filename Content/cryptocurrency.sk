@@ -1,0 +1,28 @@
+options:
+  Prefix: &8[&cCryptocurrency&8]&f
+  ExchangeRate: 1200
+
+  playerInfoDB: data.%uuid of player%.playerData
+
+function fetchCryptoCurrencyData():
+  set {cryptocurrency-fetchtime} to now formatted with "YYMMDD-HH:MM"
+
+  loop {cryptocurrency-list::*}:
+    wait 5 tick
+
+    send a request to "https://api.coinmarketcap.com/v1/ticker/%loop-value%/"
+    copy json last http response's body to {cryptocurrency-data::%loop-value%::*}
+
+on load:
+  clear {cryptocurrency-list::*}
+  clear {cryptocurrency-data::*}
+
+  add "Bitcoin" to {cryptocurrency-list::*}
+  add "Ethereum" to {cryptocurrency-list::*}
+  add "EOS" to {cryptocurrency-list::*}
+
+  fetchCryptoCurrencyData()
+
+on unload:
+  delete {cryptocurrency-list::*}
+  delete {cryptocurrency-data::*}
