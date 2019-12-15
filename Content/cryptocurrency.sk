@@ -26,3 +26,11 @@ on load:
 on unload:
   delete {cryptocurrency-list::*}
   delete {cryptocurrency-data::*}
+
+on join:
+  if {{@playerInfoDB}::cryptocurrency.Bitcoin} is not set:
+    set {{@playerInfoDB}::cryptocurrency.Bitcoin} to 0
+  if {{@playerInfoDB}::cryptocurrency.Ethereum} is not set:
+    set {{@playerInfoDB}::cryptocurrency.Ethereum} to 0
+  if {{@playerInfoDB}::cryptocurrency.EOS} is not set:
+    set {{@playerInfoDB}::cryptocurrency.EOS} to 0
