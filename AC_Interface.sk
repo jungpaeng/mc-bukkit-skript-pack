@@ -49,10 +49,23 @@ function getTotalExperience(xp: number) :: number:
 
 # 타이틀
 function runTitle(p: player, t: text, s: text, 1: integer = 10, 2: integer = 20, 3: integer = 10):
-	make console execute command "/title %{_p}% times %{_1}% %{_2}% %{_3}%"
-	make console execute command "/title %{_p}% title {""text"":""%{_t}%""}"
-	make console execute command "/title %{_p}% subtitle {""text"":""%{_s}%""}"
+  make console execute command "/title %{_p}% times %{_1}% %{_2}% %{_3}%"
+  make console execute command "/title %{_p}% title {""text"":""%{_t}%""}"
+  make console execute command "/title %{_p}% subtitle {""text"":""%{_s}%""}"
 
 # 액션바
 function runActionbar(p:player,t:text):
-	make console execute command "/title %{_p}% actionbar {""text"":""%{_t}%""}"
+  make console execute command "/title %{_p}% actionbar {""text"":""%{_t}%""}"
+
+function getMoneyUnit(money: number) :: text:
+  set {_r} to "%{_money}%"
+
+  loop round up length of {_r} / 3 times:
+    set {_l} to the last 3 characters of {_r}
+    set {_r} to the first length of {_r} - 3 characters of {_r}
+    if loop-number is 1:
+      set {_t} to "%{_l}%"
+    else:
+      set {_t} to "%{_l}%,%{_t}%"
+
+  return {_t}
