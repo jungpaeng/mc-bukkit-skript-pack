@@ -4,15 +4,6 @@ options:
 
   playerInfoDB: data.%uuid of player%.playerData
 
-function fetchCryptoCurrencyData():
-  set {cryptocurrency-fetchtime} to now formatted with "YYMMDD-HH:MM"
-
-  loop {cryptocurrency-list::*}:
-    wait 5 tick
-
-    send a request to "https://api.coinmarketcap.com/v1/ticker/%loop-value%/"
-    copy json last http response's body to {cryptocurrency-data::%loop-value%::*}
-
 on load:
   clear {cryptocurrency-list::*}
   clear {cryptocurrency-data::*}
@@ -27,13 +18,14 @@ on unload:
   delete {cryptocurrency-list::*}
   delete {cryptocurrency-data::*}
 
-on join:
-  if {{@playerInfoDB}::cryptocurrency.Bitcoin} is not set:
-    set {{@playerInfoDB}::cryptocurrency.Bitcoin} to 0
-  if {{@playerInfoDB}::cryptocurrency.Ethereum} is not set:
-    set {{@playerInfoDB}::cryptocurrency.Ethereum} to 0
-  if {{@playerInfoDB}::cryptocurrency.EOS} is not set:
-    set {{@playerInfoDB}::cryptocurrency.EOS} to 0
+function fetchCryptoCurrencyData():
+  set {cryptocurrency-fetchtime} to now formatted with "YYMMDD-HH:MM"
+
+  loop {cryptocurrency-list::*}:
+    wait 5 tick
+
+    send a request to "https://api.coinmarketcap.com/v1/ticker/%loop-value%/"
+    copy json last http response's body to {cryptocurrency-data::%loop-value%::*}
 
 command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
   trigger:
