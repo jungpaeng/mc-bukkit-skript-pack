@@ -32,8 +32,6 @@ on join:
       set {{@playerInfoDB}::cryptocurrency.%loop-value%} to 0
 
 function fetchCryptoCurrencyData():
-  set {cryptocurrency-fetchtime} to now formatted with "YYMMDD-HH:MM"
-
   loop {cryptocurrency-list::*}:
     wait 5 tick
 
