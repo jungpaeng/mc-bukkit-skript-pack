@@ -1,5 +1,7 @@
 options:
   Prefix: &8[&cCryptocurrency&8]&f
+  CryptoMarketDisplayName: "&f[&3Crypto Market&f]"
+
   ExchangeRate: 1200
 
   playerInfoDB: data.%uuid of player%.playerData
@@ -17,6 +19,11 @@ on load:
 on unload:
   delete {cryptocurrency-list::*}
   delete {cryptocurrency-data::*}
+
+on join:
+  loop {cryptocurrency-list::*}:
+    if {{@playerInfoDB}::cryptocurrency.%loop-value%} is not set:
+      set {{@playerInfoDB}::cryptocurrency.%loop-value%} to 0
 
 function fetchCryptoCurrencyData():
   set {cryptocurrency-fetchtime} to now formatted with "YYMMDD-HH:MM"
@@ -100,3 +107,34 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
       remove arg 3 from {{@playerInfoDB}::cryptocurrency.%arg-2%}
       add {_amount} to {{@playerInfoDB}::money}
       send "{@Prefix} &6%arg-3% &7개의 &6%arg-2%&7을/를 &6%{_amount}%원에 판매하였습니다!"
+    else if arg-1 is "shop":
+      wait 2 ticks
+      set {trade.market.inventory} to chest inventory with 6 rows named {@CryptoMarketDisplayName}
+      set slots integers between 0 and 9 of {trade.market.inventory} to white glass named "&a"
+      set slots integers between 17 and 18 of {trade.market.inventory} to white glass named "&a"
+      set slots integers between 26 and 27 of {trade.market.inventory} to white glass named "&a"
+      set slots integers between 35 and 36 of {trade.market.inventory} to white glass named "&a"
+      set slots integers between 44 and 53 of {trade.market.inventory} to white glass named "&a"
+
+      wait 1 tick
+      set {_bitcoin.amount} to round ({cryptocurrency-data::bitcoin::1::price_usd} parsed as number) * {@ExchangeRate}
+      set {_ethereum.amount} to round ({cryptocurrency-data::ethereum::1::price_usd} parsed as number) * {@ExchangeRate}
+      set {_eos.amount} to round ({cryptocurrency-data::eos::1::price_usd} parsed as number) * {@ExchangeRate}
+      
+      if {cryptocurrency-data::bitcoin::1::percent_change_24h} parsed as a number is less than 0:
+        set slot 10 of {trade.market.inventory} to sunflower named "&e%{cryptocurrency-data::bitcoin::1::symbol}% &7(&c%{cryptocurrency-data::bitcoin::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::bitcoin::1::name}% &7┋ &aRank ##%{cryptocurrency-data::bitcoin::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.bitcoin}% &8┋ &a$%getMoneyUnit({_bitcoin.amount} * {{@playerInfoDB}::cryptocurrency.bitcoin})%", "&8Price: &a$%getMoneyUnit({_bitcoin.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+      if {cryptocurrency-data::bitcoin::1::percent_change_24h} parsed as a number is greater than or equal to 0:
+        set slot 10 of {trade.market.inventory} to sunflower named "&e%{cryptocurrency-data::bitcoin::1::symbol}% &7(&a+%{cryptocurrency-data::bitcoin::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::bitcoin::1::name}% &7┋ &aRank ##%{cryptocurrency-data::bitcoin::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.bitcoin}% &8┋ &a$%getMoneyUnit({_bitcoin.amount} * {{@playerInfoDB}::cryptocurrency.bitcoin})%", "&8Price: &a$%getMoneyUnit({_bitcoin.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+      if {cryptocurrency-data::ethereum::1::percent_change_24h} parsed as a number is less than 0:
+        set slot 11 of {trade.market.inventory} to gray dye named "&e%{cryptocurrency-data::ethereum::1::symbol}% &7(&c%{cryptocurrency-data::ethereum::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::ethereum::1::name}% &7┋ &aRank ##%{cryptocurrency-data::ethereum::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.ethereum}% &8┋ &a$%getMoneyUnit({_ethereum.amount} * {{@playerInfoDB}::cryptocurrency.ethereum})%", "&8Price: &a$%getMoneyUnit({_ethereum.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+      if {cryptocurrency-data::ethereum::1::percent_change_24h} parsed as a number is greater than or equal to 0:
+        set slot 11 of {trade.market.inventory} to gray dye named "&e%{cryptocurrency-data::ethereum::1::symbol}% &7(&a+%{cryptocurrency-data::ethereum::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::ethereum::1::name}% &7┋ &aRank ##%{cryptocurrency-data::ethereum::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.ethereum}% &8┋ &a$%getMoneyUnit({_ethereum.amount} * {{@playerInfoDB}::cryptocurrency.ethereum})%", "&8Price: &a$%getMoneyUnit({_ethereum.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+      if {cryptocurrency-data::eos::1::percent_change_24h} parsed as a number is less than 0:
+        set slot 12 of {trade.market.inventory} to black dye named "&e%{cryptocurrency-data::eos::1::symbol}% &7(&c%{cryptocurrency-data::eos::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::eos::1::name}% &7┋ &aRank ##%{cryptocurrency-data::eos::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.eos}% &8┋ &a$%getMoneyUnit({_eos.amount} * {{@playerInfoDB}::cryptocurrency.eos})%", "&8Price: &a$%getMoneyUnit({_eos.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+      if {cryptocurrency-data::eos::1::percent_change_24h} parsed as a number is greater than or equal to 0:
+        set slot 12 of {trade.market.inventory} to black dye named "&e%{cryptocurrency-data::eos::1::symbol}% &7(&a+%{cryptocurrency-data::eos::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::eos::1::name}% &7┋ &aRank ##%{cryptocurrency-data::eos::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.eos}% &8┋ &a$%getMoneyUnit({_eos.amount} * {{@playerInfoDB}::cryptocurrency.eos})%", "&8Price: &a$%getMoneyUnit({_eos.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
+
+      wait 1 tick
+      open {trade.market.inventory} to player
+    else:
+      make player execute command "/cryptocurrency help"
