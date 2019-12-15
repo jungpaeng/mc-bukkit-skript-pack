@@ -139,3 +139,76 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
       open {_trade.market.inventory} to player
     else:
       make player execute command "/cryptocurrency help"
+
+function buyCryptocurrency(coin: text, p: player):
+  wait 2 ticks
+  set {_trade.market.buy.inventory} to chest inventory with 3 rows named {@CryptoMarketBuyDisplayName}
+  set slots integers between 0 and 9 of {_trade.market.buy.inventory} to white glass named "&a"
+  set {_coin.amount} to round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number) * {@ExchangeRate}
+
+  set slot 10 of {_trade.market.buy.inventory} to iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &71" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 1)%"
+  set slot 11 of {_trade.market.buy.inventory} to 2 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &72" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 2)%"
+  set slot 12 of {_trade.market.buy.inventory} to 4 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &74" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 4)%"
+  set slot 13 of {_trade.market.buy.inventory} to 8 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &78" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 8)%"
+  set slot 14 of {_trade.market.buy.inventory} to 16 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &716" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 16)%"
+  set slot 15 of {_trade.market.buy.inventory} to 32 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &732" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 32)%"
+  set slot 16 of {_trade.market.buy.inventory} to 64 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &764" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 64)%"
+  set slots integers between 18 and 26 of {_trade.market.buy.inventory} to white glass named "&a"
+
+  set {_pu} to uuid of {_p}
+  set {_maxcrypto} to round down ({data.%{_pu}%.playerData::money}/{_coin.amount})
+
+  set slot 17 of {_trade.market.buy.inventory} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({_maxcrypto})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {_maxcrypto})%"
+  if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is less than 0:
+    set slot 9 of {_trade.market.buy.inventory} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+  if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is greater than or equal to 0:
+    set slot 9 of {_trade.market.buy.inventory} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+
+  wait 1 tick
+  open {_trade.market.buy.inventory} to {_p}
+  
+function sellCryptocurrency(coin: text, p: player):
+  wait 2 ticks
+  set {_trade.market.buy.inventory} to chest inventory with 3 rows named {@CryptoMarketSellDisplayName}
+  set slots integers between 0 and 9 of {_trade.market.buy.inventory} to white glass named "&a"
+  set {_coin.amount} to round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number) * {@ExchangeRate}
+
+  set slot 10 of {_trade.market.buy.inventory} to iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &71" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 1)%"
+  set slot 11 of {_trade.market.buy.inventory} to 2 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &72" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 2)%"
+  set slot 12 of {_trade.market.buy.inventory} to 4 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &74" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 4)%"
+  set slot 13 of {_trade.market.buy.inventory} to 8 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &78" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 8)%"
+  set slot 14 of {_trade.market.buy.inventory} to 16 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &716" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 16)%"
+  set slot 15 of {_trade.market.buy.inventory} to 32 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &732" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 32)%"
+  set slot 16 of {_trade.market.buy.inventory} to 64 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &764" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 64)%"
+  set slots integers between 18 and 26 of {_trade.market.buy.inventory} to white glass named "&a"
+
+  set {_pu} to uuid of {_p}
+
+  set slot 17 of {_trade.market.buy.inventory} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})%"
+  if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is less than 0:
+    set slot 9 of {_trade.market.buy.inventory} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+  if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is greater than or equal to 0:
+    set slot 9 of {_trade.market.buy.inventory} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+
+  wait 1 tick
+  open {_trade.market.buy.inventory} to {_p}
+
+on inventory click:
+  if inventory name is {@CryptoMarketDisplayName}:
+    cancel event
+    
+    if clicked slot is 10:
+      if clicked type is left mouse button:
+        buyCryptocurrency("Bitcoin", player)
+      else if clicked type is right mouse button:
+        sellCryptocurrency("Bitcoin", player)
+    if clicked slot is 11:
+      if clicked type is left mouse button:
+        buyCryptocurrency("Ethereum", player)
+      else if clicked type is right mouse button:
+        sellCryptocurrency("Ethereum", player)
+    if clicked slot is 12:
+      if clicked type is left mouse button:
+        buyCryptocurrency("EOS", player)
+      else if clicked type is right mouse button:
+        sellCryptocurrency("EOS", player)
