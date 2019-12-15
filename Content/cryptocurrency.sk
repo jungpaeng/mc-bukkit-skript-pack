@@ -1,16 +1,18 @@
 options:
   Prefix: &8[&cCryptocurrency&8]&f
   CryptoMarketDisplayName: "&f[&3Crypto Market&f]"
-  CryptoMarketBuyDisplayName: "&f[&3Buy Crypto&f]"
-  CryptoMarketSellDisplayName: "&f[&3Cell Crypto&f]"
+  CryptoMarketBuyDisplayName: "&f[&3Buy Crypto Coin&f]"
+  CryptoMarketSellDisplayName: "&f[&3Cell Crypto Coin&f]"
 
-  ExchangeRate: 1200
+  ExchangeRate: 1213
 
   playerInfoDB: data.%uuid of player%.playerData
 
 on load:
   clear {cryptocurrency-list::*}
   clear {cryptocurrency-data::*}
+  clear {cryptocurrency.selected.coin::*}
+  clear {cryptocurrency.buy.maxcrypto::*}
 
   add "Bitcoin" to {cryptocurrency-list::*}
   add "Ethereum" to {cryptocurrency-list::*}
@@ -21,6 +23,8 @@ on load:
 on unload:
   delete {cryptocurrency-list::*}
   delete {cryptocurrency-data::*}
+  delete {cryptocurrency.selected.coin::*}
+  delete {cryptocurrency.buy.maxcrypto::*}
 
 on join:
   loop {cryptocurrency-list::*}:
@@ -64,7 +68,7 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
         stop
       # 구매할 코인의 개수가 1보다 적은 경우
       if arg-3 < 1:
-        send "{@Prefix} &c 1 이상의 수를 입력해주세요."
+        send "{@Prefix} &c구매할 수 없습니다."
         stop
 
       set {_amount} to arg-3 * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
@@ -95,7 +99,7 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
         stop
       # 판매할 코인의 개수가 1보다 적은 경우
       if arg-3 < 1:
-        send "{@Prefix} &c 1 이상의 수를 입력해주세요."
+        send "{@Prefix} &c판매할 수 없습니다."
         stop
       
       # 소지한 코인이 부족한 경우
@@ -119,9 +123,9 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
       set slots integers between 44 and 53 of {_trade.market.inventory} to white glass named "&a"
 
       wait 1 tick
-      set {_bitcoin.amount} to round ({cryptocurrency-data::bitcoin::1::price_usd} parsed as number) * {@ExchangeRate}
-      set {_ethereum.amount} to round ({cryptocurrency-data::ethereum::1::price_usd} parsed as number) * {@ExchangeRate}
-      set {_eos.amount} to round ({cryptocurrency-data::eos::1::price_usd} parsed as number) * {@ExchangeRate}
+      set {_bitcoin.amount} to {@ExchangeRate} * round ({cryptocurrency-data::bitcoin::1::price_usd} parsed as number)
+      set {_ethereum.amount} to {@ExchangeRate} * round ({cryptocurrency-data::ethereum::1::price_usd} parsed as number)
+      set {_eos.amount} to {@ExchangeRate} * round ({cryptocurrency-data::eos::1::price_usd} parsed as number)
       
       if {cryptocurrency-data::bitcoin::1::percent_change_24h} parsed as a number is less than 0:
         set slot 10 of {_trade.market.inventory} to sunflower named "&e%{cryptocurrency-data::bitcoin::1::symbol}% &7(&c%{cryptocurrency-data::bitcoin::1::percent_change_24h}%%%&7)" with lore "&7%{cryptocurrency-data::bitcoin::1::name}% &7┋ &aRank ##%{cryptocurrency-data::bitcoin::1::rank}%", "&8소유 코인: &a%{{@playerInfoDB}::cryptocurrency.bitcoin}% &8┋ &a$%getMoneyUnit({_bitcoin.amount} * {{@playerInfoDB}::cryptocurrency.bitcoin})%", "&8Price: &a$%getMoneyUnit({_bitcoin.amount})%", "" and "&a[좌클릭] 코인 구매", "&c[우클릭] 코인 판매"
@@ -142,9 +146,11 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
 
 function buyCryptocurrency(coin: text, p: player):
   wait 2 ticks
+  set {cryptocurrency.selected.coin::%{_p}%} to {_coin}
+
   set {_trade.market.buy.inventory} to chest inventory with 3 rows named {@CryptoMarketBuyDisplayName}
   set slots integers between 0 and 9 of {_trade.market.buy.inventory} to white glass named "&a"
-  set {_coin.amount} to round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number) * {@ExchangeRate}
+  set {_coin.amount} to {@ExchangeRate} * round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number)
 
   set slot 10 of {_trade.market.buy.inventory} to iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &71" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 1)%"
   set slot 11 of {_trade.market.buy.inventory} to 2 iron nugget named "&f[&a&l구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &72" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 2)%"
@@ -156,9 +162,9 @@ function buyCryptocurrency(coin: text, p: player):
   set slots integers between 18 and 26 of {_trade.market.buy.inventory} to white glass named "&a"
 
   set {_pu} to uuid of {_p}
-  set {_maxcrypto} to round down ({data.%{_pu}%.playerData::money}/{_coin.amount})
+  set {cryptocurrency.buy.maxcrypto::%{_p}%} to round down ({data.%{_pu}%.playerData::money}/{_coin.amount})
 
-  set slot 17 of {_trade.market.buy.inventory} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({_maxcrypto})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {_maxcrypto})%"
+  set slot 17 of {_trade.market.buy.inventory} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%{_p}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%{_p}%})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is less than 0:
     set slot 9 of {_trade.market.buy.inventory} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is greater than or equal to 0:
@@ -169,9 +175,11 @@ function buyCryptocurrency(coin: text, p: player):
   
 function sellCryptocurrency(coin: text, p: player):
   wait 2 ticks
+  set {cryptocurrency.selected.coin::%{_p}%} to {_coin}
+
   set {_trade.market.buy.inventory} to chest inventory with 3 rows named {@CryptoMarketSellDisplayName}
   set slots integers between 0 and 9 of {_trade.market.buy.inventory} to white glass named "&a"
-  set {_coin.amount} to round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number) * {@ExchangeRate}
+  set {_coin.amount} to {@ExchangeRate} * round ({cryptocurrency-data::%{_coin}%::1::price_usd} parsed as number)
 
   set slot 10 of {_trade.market.buy.inventory} to iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &71" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 1)%"
   set slot 11 of {_trade.market.buy.inventory} to 2 iron nugget named "&f[&a&l판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &72" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * 2)%"
@@ -212,3 +220,42 @@ on inventory click:
         buyCryptocurrency("EOS", player)
       else if clicked type is right mouse button:
         sellCryptocurrency("EOS", player)
+  else if inventory name is {@CryptoMarketBuyDisplayName}:
+    cancel event
+
+    if clicked slot is 10:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 1"
+    if clicked slot is 11:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 2"
+    if clicked slot is 12:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 4"
+    if clicked slot is 13:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 8"
+    if clicked slot is 14:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 16"
+    if clicked slot is 15:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 32"
+    if clicked slot is 16:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 64"
+    if clicked slot is 17:
+      make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% %{cryptocurrency.buy.maxcrypto::%player%}%"
+  else if inventory name is {@CryptoMarketSellDisplayName}:
+    cancel event
+
+    if clicked slot is 10:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 1"
+    if clicked slot is 11:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 2"
+    if clicked slot is 12:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 4"
+    if clicked slot is 13:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 8"
+    if clicked slot is 14:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 16"
+    if clicked slot is 15:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 32"
+    if clicked slot is 16:
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 64"
+    if clicked slot is 17:
+      send "%{data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%}%" to console
+      make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% %{data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%}%"
