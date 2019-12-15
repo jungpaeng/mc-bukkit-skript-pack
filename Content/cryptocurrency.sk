@@ -34,3 +34,77 @@ on join:
     set {{@playerInfoDB}::cryptocurrency.Ethereum} to 0
   if {{@playerInfoDB}::cryptocurrency.EOS} is not set:
     set {{@playerInfoDB}::cryptocurrency.EOS} to 0
+
+command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
+  trigger:
+    if arg-1 is "help":
+      send "&8&m----------------&r &6✎ &e&lCryptocurrency&r &6✐ &8&m----------------"
+      send "&7• &a/cryptocurrency buy [Coin] [Amount] &7(코인 구매)"
+      send "&7"
+      send "&7• &a/cryptocurrency sell [Coin] [Amount] &7(코인 판매)"
+      send "&7"
+      send "&7• &a/cryptocurrency pay [Coin] [Amount] [Player] &7(코인 전송)"
+      send "&7"
+      send "&7• &a/cryptocurrency shop &7(코인 거래소)"
+    else if arg-1 is "buy":
+      # 코인의 이름이 누락되어 있는 경우
+      if arg-2 is not set:
+        send "{@Prefix} &c코인의 이름을 입력해주세요."
+        send "&a%{cryptocurrency-list::*}%"
+        stop
+      # 존재하지 않는 코인의 이름을 입력한 경우
+      if {cryptocurrency-list::*} does not contain arg 2:
+        send "{@Prefix} &c유효한 코인의 이름을 입력해주세요."
+        send "&a%{cryptocurrency-list::*}%"
+        stop
+      # 구매할 코인의 개수가 누락되어 있는 경우
+      if arg-3 is not set:
+        make player execute command "/cryptocurrency help"
+        stop
+      # 구매할 코인의 개수가 .01보다 적은 경우
+      if arg-3 < .01:
+        send "{@Prefix} &c 0.01 이상의 수를 입력해주세요."
+        stop
+
+      set {_amount} to arg-3 * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
+      set {_amount} to {_amount} * {@ExchangeRate}
+      
+      # 소지한 금액이 부족한 경우
+      if {{@playerInfoDB}::money} < {_amount}:
+        send "{@Prefix} &c소지한 금액이 부족합니다."
+        stop
+
+      remove {_amount} from {{@playerInfoDB}::money}
+      add arg 3 to {{@playerInfoDB}::cryptocurrency.%arg-2%}
+      send "{@Prefix} &6%{_amount}%&7원을 사용하여 &6%arg-3% &7개의 &6%arg-2%&7을/를 구매하였습니다!"
+    else if arg-1 is "sell":
+      # 코인의 이름이 누락되어 있는 경우
+      if arg-2 is not set:
+        send "{@Prefix} &c코인의 이름을 입력해주세요."
+        send "&a%{cryptocurrency-list::*}%"
+        stop
+      # 존재하지 않는 코인의 이름을 입력한 경우
+      if {cryptocurrency-list::*} does not contain arg 2:
+        send "{@Prefix} &c유효한 코인의 이름을 입력해주세요."
+        send "&a%{cryptocurrency-list::*}%"
+        stop
+      # 판매할 코인의 개수가 누락되어 있는 경우
+      if arg-3 is not set:
+        make player execute command "/cryptocurrency help"
+        stop
+      # 판매할 코인의 개수가 .01보다 적은 경우
+      if arg-3 < .01:
+        send "{@Prefix} &c 0.01 이상의 수를 입력해주세요."
+        stop
+      
+      # 소지한 코인이 부족한 경우
+      if {{@playerInfoDB}::cryptocurrency.%arg-2%} < arg-3:
+        send "{@Prefix} &c소지한 코인이 부족합니다."
+        stop
+
+      set {_amount} to arg-3 * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
+      set {_amount} to {_amount} * {@ExchangeRate}
+        
+      remove arg 3 from {{@playerInfoDB}::cryptocurrency.%arg-2%}
+      add {_amount} to {{@playerInfoDB}::money}
+      send "{@Prefix} &6%arg-3% &7개의 &6%arg-2%&7을/를 &6%{_amount}%원에 판매하였습니다!"
