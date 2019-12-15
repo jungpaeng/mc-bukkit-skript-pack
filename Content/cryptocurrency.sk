@@ -67,8 +67,8 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
         send "{@Prefix} &c구매할 수 없습니다."
         stop
 
-      set {_amount} to arg-3 * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
-      set {_amount} to {_amount} * {@ExchangeRate}
+      set {_oneAmount} to {@ExchangeRate} * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
+      set {_amount} to {_oneAmount} * arg-3
       
       # 소지한 금액이 부족한 경우
       if {{@playerInfoDB}::money} < {_amount}:
@@ -77,7 +77,11 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
 
       remove {_amount} from {{@playerInfoDB}::money}
       add arg 3 to {{@playerInfoDB}::cryptocurrency.%arg-2%}
-      send "{@Prefix} &6%{_amount}%&7원을 사용하여 &6%arg-3% &7개의 &6%arg-2%&7을/를 구매하였습니다!"
+
+      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_oneAmount})
+      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%arg-2%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_oneAmount} * {cryptocurrency.buy.maxcrypto::%player%})%"
+
+      broadcast "{@Prefix} <light green>%player%&7님이 &6%getMoneyUnit({_amount})%&7원을 사용하여 &6%getMoneyUnit(arg-3)%&7개의 &6%arg-2%&7을/를 구매하였습니다!"
     else if arg-1 is "sell":
       # 코인의 이름이 누락되어 있는 경우
       if arg-2 is not set:
@@ -103,12 +107,14 @@ command /cryptocurrency [<text>] [<text>] [<number>] [<text>]:
         send "{@Prefix} &c소지한 코인이 부족합니다."
         stop
 
-      set {_amount} to arg-3 * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
-      set {_amount} to {_amount} * {@ExchangeRate}
+      set {_oneAmount} to {@ExchangeRate} * round ({cryptocurrency-data::%arg-2%::1::price_usd} parsed as number)
+      set {_amount} to {_oneAmount} * arg-3
         
       remove arg 3 from {{@playerInfoDB}::cryptocurrency.%arg-2%}
       add {_amount} to {{@playerInfoDB}::money}
-      send "{@Prefix} &6%arg-3% &7개의 &6%arg-2%&7을/를 &6%{_amount}%원에 판매하였습니다!"
+
+      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%arg-2%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%arg-2%})%&7)" and "&ePrice: &7$%getMoneyUnit({_oneAmount} * {data.%uuid of player%.playerData::cryptocurrency.%arg-2%})%"
+      broadcast "{@Prefix} <light green>%player%&7님이 &6%getMoneyUnit(arg-3)%&7개의 &6%arg-2%&7을/를 &6%getMoneyUnit({_amount})%&7원에 판매하였습니다!"
     else if arg-1 is "shop":
       wait 2 ticks
       set {_trade.market.inventory} to chest inventory with 6 rows named {@CryptoMarketDisplayName}
@@ -165,81 +171,41 @@ on inventory click:
 
     if clicked slot is 10:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 1"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 11:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 2"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 12:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 4"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 13:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 8"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 14:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 16"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 15:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 32"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 16:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% 64"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
     if clicked slot is 17:
       make player execute command "/cryptocurrency buy %{cryptocurrency.selected.coin::%player%}% %{cryptocurrency.buy.maxcrypto::%player%}%"
-
-      set {cryptocurrency.buy.maxcrypto::%player%} to round down ({data.%uuid of player%.playerData::money}/{_coin.amount})
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%player%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%player%})%"
   else if inventory name is {@CryptoMarketSellDisplayName}:
     cancel event
     set {_coin.amount} to {@ExchangeRate} * round ({cryptocurrency-data::%{cryptocurrency.selected.coin::%player%}%::1::price_usd} parsed as number)
 
     if clicked slot is 10:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 1"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 11:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 2"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 12:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 4"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 13:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 8"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 14:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 16"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 15:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 32"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 16:
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% 64"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
     if clicked slot is 17:
       send "%{data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%}%" to console
       make player execute command "/cryptocurrency sell %{cryptocurrency.selected.coin::%player%}% %{data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%}%"
-      
-      set slot 17 of {trade.market.trade.inventory::%player%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{cryptocurrency.selected.coin::%player%}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%uuid of player%.playerData::cryptocurrency.%{cryptocurrency.selected.coin::%player%}%})%"
 
 function fetchCryptoCurrencyData():
   loop {cryptocurrency-list::*}:
@@ -270,9 +236,9 @@ function buyCryptocurrency(coin: text, p: player):
 
   set slot 17 of {trade.market.trade.inventory::%{_p}%} to chest named "&f[&a&l최대 수량 구매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({cryptocurrency.buy.maxcrypto::%{_p}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {cryptocurrency.buy.maxcrypto::%{_p}%})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is less than 0:
-    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is greater than or equal to 0:
-    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
 
   wait 1 tick
   open {trade.market.trade.inventory::%{_p}%} to {_p}
@@ -298,9 +264,9 @@ function sellCryptocurrency(coin: text, p: player):
 
   set slot 17 of {trade.market.trade.inventory::%{_p}%} to chest named "&f[&a&l최대 수량 판매&f]" with lore "&eCoin: &7%{_coin}%", "&eAmount: &7Max (&e%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})%&7)" and "&ePrice: &7$%getMoneyUnit({_coin.amount} * {data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is less than 0:
-    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&c%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
   if {cryptocurrency-data::%{_coin}%::1::percent_change_24h} parsed as a number is greater than or equal to 0:
-    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%{data.%{_pu}%.playerData::cryptocurrency.%{_coin}%}% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
+    set slot 9 of {trade.market.trade.inventory::%{_p}%} to a Paper named "&e%{cryptocurrency-data::%{_coin}%::1::symbol}% &7(&a+%{cryptocurrency-data::%{_coin}%::1::percent_change_24h}%%%&7)" with lore "&e%{cryptocurrency-data::%{_coin}%::1::name}% &7┋ &aRank ##%{cryptocurrency-data::%{_coin}%::1::rank}%", "&8소유 코인: &a%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%})% &8┋ &a$%getMoneyUnit({data.%{_pu}%.playerData::cryptocurrency.%{_coin}%} * {_coin.amount})%" and "&8Price: &a$%getMoneyUnit({_coin.amount})%"
 
   wait 1 tick
   open {trade.market.trade.inventory::%{_p}%} to {_p}
