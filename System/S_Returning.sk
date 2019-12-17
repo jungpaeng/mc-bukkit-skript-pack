@@ -78,5 +78,5 @@ on right click with book:
     stopEffect "%player%-returning-2"
     stopEffect "%player%-returning-3"
 
+    remove 1 of tool from tool
     teleport player to location at ({@TELEPORT_POS})
-    
